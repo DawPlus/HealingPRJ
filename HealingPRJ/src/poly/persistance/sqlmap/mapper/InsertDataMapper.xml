@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="poly.persistance.mapper.IInsertDataMapper">
+
+	<!-- 서비스 만족도 데이터 넣기 -->
+	<insert id="serviceInsertData" parameterType="ServiceInsertDTO">
+		INSERT INTO SERVICE_ENV_SATISFACTION
+		(
+		OPENDAY,
+		SEX,
+		AGE,
+		RESIDENCE,
+		JOB,
+		PTCPROGRAM,
+		AGENCY,
+		EVAL_DATE,
+		SCORE1,	SCORE2,	SCORE3,	SCORE4,	SCORE5,	SCORE6,	SCORE7,
+		SCORE8,	SCORE9,	SCORE10, FACILITY_OPINION, SCORE11,	SCORE12, SCORE13, SCORE14,
+		SCORE15, SCORE16, OPERATION_OPINION, SCORE17, SCORE18
+		)
+		VALUES
+		<foreach item="serviceDtoList" index="index" collection="serviceDtoList" separator=",">
+		(
+		#{serviceDtoList.openday},
+		#{serviceDtoList.sex},
+		#{serviceDtoList.age},
+		#{serviceDtoList.residence},
+		#{serviceDtoList.job},
+		#{serviceDtoList.ptcProgram},
+		#{serviceDtoList.agency},
+		#{serviceDtoList.eval_date},
+		<foreach item="scoreList" index="index" collection="serviceDtoList.scoreList" separator=",">
+			#{scoreList}
+		</foreach>
+		)
+	</foreach>
+	</insert>
+	
+	
+	<!-- 프로그램 만족도 데이터 넣기 -->
+	<insert id="programInsertData" parameterType="ProgramInsertDTO">
+		INSERT INTO PROGRAM_SATISFACTION
+		(
+		OPENDAY,
+		SEX,
+		AGE,
+		RESIDENCE,
+		JOB,
+		PTCPROGRAM,
+		AGENCY,
+		EVAL_DATE,
+		PROGRAM_NAME,
+		TEACHER,
+		PLACE,
+		TYPE,
+		BUNYA,
+		SCORE1,	SCORE2,	SCORE3,	SCORE4,	SCORE5,	SCORE6,	SCORE7,
+		SCORE8,	SCORE9,	ETC_OPINION
+		)
+		VALUES
+		<foreach item="programDtoList" index="index" collection="programDtoList" separator=",">
+		(
+		#{programDtoList.openday},
+		#{programDtoList.sex},
+		#{programDtoList.age},
+		#{programDtoList.residence},
+		#{programDtoList.job},
+		#{programDtoList.ptcProgram},
+		#{programDtoList.agency},
+		#{programDtoList.eval_date},
+		#{programDtoList.program_name},
+		#{programDtoList.teacher},
+		#{programDtoList.place},
+		#{programDtoList.type},
+		#{programDtoList.bunya},
+		<foreach item="scoreList" index="index" collection="programDtoList.scoreList" separator=",">
+			#{scoreList}
+		</foreach>
+		)
+	</foreach>
+	</insert>
+	
+	
+	<!-- 예방서비스 효과평가 데이터 넣기 -->
+	<insert id="preventInsertData" parameterType="PreventInsertDTO">
+		INSERT INTO PREVENT_SERVICE
+		(
+		OPENDAY,
+		AGENCY,
+		NAME,
+		SEX,
+		AGE,
+		RESIDENCE,
+		JOB,
+		PTCPROGRAM,
+		PAST_STRESS_EXPERIENCE,
+		EVAL_DATE,
+		PV,
+		SCORE1, SCORE2, SCORE3, SCORE4, SCORE5, SCORE6, SCORE7, SCORE8, SCORE9, SCORE10,
+		SCORE11, SCORE12, SCORE13, SCORE14, SCORE15, SCORE16, SCORE17, SCORE18, SCORE19, SCORE20
+		)
+		VALUES
+		<foreach item="preventDtoList" index="index" collection="preventDtoList" separator=",">
+		(
+		#{preventDtoList.openday},
+		#{preventDtoList.agency},
+		#{preventDtoList.name},
+		#{preventDtoList.sex},
+		#{preventDtoList.age},
+		#{preventDtoList.residence},
+		#{preventDtoList.job},
+		#{preventDtoList.ptcProgram},
+		#{preventDtoList.past_stress_experience},
+		#{preventDtoList.eval_date},
+		#{preventDtoList.pv},
+		<foreach item="scoreList" index="index" collection="preventDtoList.scoreList" separator=",">
+			#{scoreList}
+		</foreach>
+		)
+	</foreach>
+	</insert>	
+	
+	<!-- 힐링서비스 효과평가 데이터 넣기 -->
+	<insert id="healingInsertData" parameterType="HealingInsertDTO">
+		INSERT INTO HEALING_SERVICE
+		(
+		OPENDAY,
+		AGENCY,
+		NAME,
+		SEX,
+		AGE,
+		RESIDENCE,
+		JOB,
+		PTCPROGRAM,
+		PAST_STRESS_EXPERIENCE,
+		EVAL_DATE,
+		PV,
+		SCORE1, SCORE2, SCORE3, SCORE4, SCORE5, SCORE6, SCORE7, SCORE8, SCORE9, SCORE10,
+		SCORE11, SCORE12, SCORE13, SCORE14, SCORE15, SCORE16, SCORE17, SCORE18, SCORE19, SCORE20,
+		SCORE21, SCORE22
+		)
+		VALUES
+		<foreach item="healingDtoList" index="index" collection="healingDtoList" separator=",">
+		(
+		#{healingDtoList.openday},
+		#{healingDtoList.agency},
+		#{healingDtoList.name},
+		#{healingDtoList.sex},
+		#{healingDtoList.age},
+		#{healingDtoList.residence},
+		#{healingDtoList.job},
+		#{healingDtoList.ptcProgram},
+		#{healingDtoList.past_stress_experience},
+		#{healingDtoList.eval_date},
+		#{healingDtoList.pv},
+		<foreach item="scoreList" index="index" collection="healingDtoList.scoreList" separator=",">
+			#{scoreList}
+		</foreach>
+		)
+	</foreach>
+	</insert>	
+	
+	
+	<!-- 접수서비스 효과평가 데이터 넣기 -->
+	<insert id="counselInsertData" parameterType="CounselInsertDTO">
+		INSERT INTO COUNSEL_SERVICE
+		(
+		OPENDAY,
+		AGENCY,
+		NAME,
+		SEX,
+		AGE,
+		RESIDENCE,
+		JOB,
+		COUNSEL_CONTENTS,
+		EVAL_DATE,
+		SESSION,
+		PAST_STRESS_EXPERIENCE,
+		PV,
+		SCORE1, SCORE2, SCORE3, SCORE4, SCORE5, SCORE6, SCORE7, SCORE8, SCORE9, SCORE10,
+		SCORE11, SCORE12, SCORE13, SCORE14, SCORE15, SCORE16, SCORE17, SCORE18, SCORE19,
+		SCORE20, SCORE21, SCORE22, SCORE23, SCORE24, SCORE25, SCORE26, SCORE27, SCORE28, SCORE29,
+		SCORE30, SCORE31, SCORE32, SCORE33, SCORE34, SCORE35, SCORE36, SCORE37, SCORE38, SCORE39,
+		SCORE40, SCORE41, SCORE42, SCORE43, SCORE44, SCORE45, SCORE46, SCORE47, SCORE48, SCORE49,
+		SCORE50, SCORE51, SCORE52, SCORE53, SCORE54, SCORE55, SCORE56, SCORE57, SCORE58, SCORE59,
+		SCORE60, SCORE61, SCORE62
+		)
+		VALUES
+		<foreach item="counselDtoList" index="index" collection="counselDtoList" separator=",">
+		(
+		#{counselDtoList.openday},
+		#{counselDtoList.agency},
+		#{counselDtoList.name},
+		#{counselDtoList.sex},
+		#{counselDtoList.age},
+		#{counselDtoList.residence},
+		#{counselDtoList.job},
+		#{counselDtoList.counsel_contents},
+		#{counselDtoList.eval_date},
+		#{counselDtoList.session},
+		#{counselDtoList.past_stress_experience},
+		#{counselDtoList.pv},
+		<foreach item="scoreList" index="index" collection="counselDtoList.scoreList" separator=",">
+			#{scoreList}
+		</foreach>
+		)
+	</foreach>
+	</insert>	
+	
+	<!-- HRV 데이터 넣기 -->
+	<insert id="hrvInsertData" parameterType="HrvInsertDTO">
+		INSERT INTO HRV_SERVICE
+		(
+		DATE,
+		AGENCY,
+		NAME,
+		AGE,
+		SEX,
+		EQUIPMENT,
+		ID,
+		JUMIN,
+		PV,
+		NUM8,
+		NUM1,NUM2,NUM3,NUM4,NUM5,NUM6,NUM7
+		)
+		VALUES
+		<foreach item="hrvDtoList" index="index" collection="hrvDtoList" separator=",">
+		(
+		#{hrvDtoList.date},
+		#{hrvDtoList.agency},
+		#{hrvDtoList.name},
+		#{hrvDtoList.age},
+		#{hrvDtoList.sex},
+		#{hrvDtoList.equipment},
+		#{hrvDtoList.id},
+		#{hrvDtoList.jumin},
+		#{hrvDtoList.pv},
+		#{hrvDtoList.num8},
+		<foreach item="scoreList" index="index" collection="hrvDtoList.scoreList" separator=",">
+			#{scoreList}
+		</foreach>
+		)
+	</foreach>
+	</insert>
+
+	<!-- start////. 홍두표 -->
+	<!-- 기관명 및 시작일자 조회 -->
+	<select id="hasAgencyStartDate" parameterType="HealingInsertDTO" resultType="int">
+		SELECT COUNT(*) 
+		FROM healing_service
+		WHERE agency = #{agency} 
+		AND openday = #{openday};
+	</select>
+
+	<!-- 힐링 서비스 - 기관명 및 시작일자 조회 후 사전 데이터 불러오기 -->
+	<select id="getPreviousHealingList" parameterType="HealingInsertDTO"
+	resultType="HealingInsertDTO">
+		SELECT 
+		OPENDAY, AGENCY, NAME, SEX, AGE, RESIDENCE, JOB, PTCPROGRAM, PAST_STRESS_EXPERIENCE,
+		EVAL_DATE, PV, 
+		CONCAT(SCORE1, ',', SCORE2, ',', SCORE3, ',',
+			SCORE4, ',', SCORE5, ',', SCORE6, ',', SCORE7, ',', SCORE8, ',',
+			SCORE9, ',', SCORE10, ',', SCORE11, ',', SCORE12, ',', SCORE13, ',', 
+			SCORE14, ',', SCORE15, ',', SCORE16, ',', SCORE17, ',', SCORE18, ',', 
+			SCORE19, ',', SCORE20, ',', SCORE21, ',', SCORE22) as scoreString2List
+		FROM healing_service
+		WHERE AGENCY = #{agency} 
+		AND OPENDAY = #{openday}
+		AND PV = (SELECT PV 
+						FROM healing_service 
+						WHERE AGENCY = #{agency} 
+						AND OPENDAY = #{openday} ORDER BY EVAL_DATE DESC limit 1)
+	</select>
+
+	<!-- 예방 서비스 - 기관명 및 시작일자 조회 후 사전 데이터 불러오기 -->
+	<select id="getPreviousPreventList" parameterType="PreventInsertDTO"
+	resultType="PreventInsertDTO">
+		SELECT 
+		OPENDAY, AGENCY, NAME, SEX, AGE, RESIDENCE, JOB, PTCPROGRAM, PAST_STRESS_EXPERIENCE,
+		EVAL_DATE, PV, 
+		CONCAT(SCORE1, ',', SCORE2, ',', SCORE3, ',',
+			SCORE4, ',', SCORE5, ',', SCORE6, ',', SCORE7, ',', SCORE8, ',',
+			SCORE9, ',', SCORE10, ',', SCORE11, ',', SCORE12, ',', SCORE13, ',', 
+			SCORE14, ',', SCORE15, ',', SCORE16, ',', SCORE17, ',', SCORE18, ',', 
+			SCORE19, ',', SCORE20) as scoreString2List
+		FROM prevent_service
+		WHERE AGENCY = #{agency} 
+		AND OPENDAY = #{openday}
+		AND PV = (SELECT PV 
+						FROM prevent_service 
+						WHERE AGENCY = #{agency} 
+						AND OPENDAY = #{openday} ORDER BY EVAL_DATE DESC limit 1)
+	</select>
+	
+	<!-- 상담&치유 서비스 - 기관명 및 시작일자 조회 후 사전 데이터 불러오기 -->
+	<select id="getPreviousCounselList" parameterType="CounselInsertDTO"
+	resultType="CounselInsertDTO">
+		SELECT 
+		OPENDAY, AGENCY, NAME, SEX, AGE, COUNSEL_CONTENTS, SESSION, 
+		RESIDENCE, JOB, PAST_STRESS_EXPERIENCE, EVAL_DATE, PV, 
+		CONCAT(SCORE1, ',', SCORE2, ',', SCORE3, ',',
+			SCORE4, ',', SCORE5, ',', SCORE6, ',', SCORE7, ',', SCORE8, ',',
+			SCORE9, ',', SCORE10, ',', SCORE11, ',', SCORE12, ',', SCORE13, ',', 
+			SCORE14, ',', SCORE15, ',', SCORE16, ',', SCORE17, ',', SCORE18, ',', 
+			SCORE19, ',', SCORE20, ',', SCORE21, ',', SCORE22, ',', SCORE23, ',',
+			SCORE24, ',', SCORE25, ',', SCORE26, ',', SCORE27, ',', SCORE28, ',',
+			SCORE29, ',', SCORE30, ',', SCORE31, ',', SCORE32, ',', SCORE33, ',', 
+			SCORE34, ',', SCORE35, ',', SCORE36, ',', SCORE37, ',', SCORE38, ',', 
+			SCORE39, ',', SCORE40, ',', SCORE41, ',', SCORE42, ',', SCORE43, ',',
+			SCORE44, ',', SCORE45, ',', SCORE46, ',', SCORE47, ',', SCORE48, ',',
+			SCORE49, ',', SCORE50, ',', SCORE51, ',', SCORE52, ',', SCORE53, ',', 
+			SCORE54, ',', SCORE55, ',', SCORE56, ',', SCORE57, ',', SCORE58, ',', 
+			SCORE59, ',', SCORE60, ',', SCORE61, ',', SCORE62) as scoreString2List
+		FROM counsel_service
+		WHERE AGENCY = #{agency} 
+		AND OPENDAY = #{openday}
+		AND PV = (SELECT PV 
+						FROM counsel_service 
+						WHERE AGENCY = #{agency} 
+						AND OPENDAY = #{openday} ORDER BY EVAL_DATE DESC limit 1)
+	</select>
+	
+	<!-- 프로그램 만족도 - 기관명 및 시작일자 조회 후 사전 데이터 불러오기 -->
+	<select id="getPreviousProgramList" parameterType="ProgramInsertDTO"
+	resultType="ProgramInsertDTO">
+		SELECT 
+			OPENDAY, AGENCY, EVAL_DATE, SEX, AGE, PTCPROGRAM, PROGRAM_NAME, TEACHER, PLACE,
+			RESIDENCE, JOB, 
+			CONCAT(SCORE1, ',', SCORE2, ',', SCORE3, ',',
+				SCORE4, ',', SCORE5, ',', SCORE6, ',', SCORE7, ',', SCORE8, ',', SCORE9) as scoreString2List,
+			ETC_OPINION, TYPE
+		FROM foresthealing.program_satisfaction
+		WHERE AGENCY = #{agency}
+			AND OPENDAY = #{openday}
+			AND program_name = #{program_name}
+			AND EVAL_DATE = #{eval_date};
+	</select>
+	
+	<!-- 서비스환경 만족도 - 기관명 및 시작일자 조회 후 사전 데이터 불러오기 -->
+	<select id="getPreviousServiceList" parameterType="ServiceInsertDTO"
+	resultType="ServiceInsertDTO">
+		SELECT
+		OPENDAY, AGENCY, SEX, AGE, PTCPROGRAM,
+		RESIDENCE, JOB, EVAL_DATE,
+		CONCAT(SCORE1, ',', SCORE2, ',', SCORE3, ',',
+			SCORE4, ',', SCORE5, ',', SCORE6, ',', SCORE7, ',', SCORE8, ',',
+			SCORE9, ',', SCORE10, ',', FACILITY_OPINION, ',', SCORE11, ',', SCORE12, ',',
+			SCORE13, ',', SCORE14, ',', SCORE15, ',', SCORE16, ',', OPERATION_OPINION, ',', SCORE17, ',', SCORE18) as scoreString2List
+		FROM service_env_satisfaction
+		WHERE AGENCY = #{agency}
+		AND OPENDAY = #{openday}
+		AND EVAL_DATE = (SELECT EVAL_DATE 
+						FROM service_env_satisfaction 
+						WHERE AGENCY = #{agency} 
+						AND OPENDAY = #{openday} ORDER BY EVAL_DATE DESC limit 1)
+	</select>
+	
+	<!-- hrv - 기관명 및 시작일자 조회 후 사전 데이터 불러오기 -->
+	<select id="getPreviousHrvList" parameterType="HrvInsertDTO"
+	resultType="HrvInsertDTO">
+		SELECT 
+		AGENCY, PV, EQUIPMENT, ID, NAME, JUMIN, SEX, AGE, DATE, 
+		CONCAT(NUM1, ',', NUM2, ',', NUM3, ',',
+			NUM4, ',', NUM5, ',', NUM6, ',', NUM7, ',', NUM8) as scoreString2List
+		FROM hrv_service
+		WHERE AGENCY = #{agency} 
+		AND PV = #{pv}
+		ORDER BY DATE ASC
+	</select>
+	
+	<!-- 바이브라 - 기관명 및 시작일자 조회 후 사전 데이터 불러오기 -->
+	<select id="getPreviousVibraList" parameterType="VibraInsertDTO"
+	resultType="VibraInsertDTO">
+		SELECT 
+		AGENCY, PV, EQUIPMENT, ID, NAME, JUMIN, SEX, AGE, DATE, 
+		CONCAT(NUM1, ',', NUM2, ',', NUM3, ',',
+			NUM4, ',', NUM5, ',', NUM6, ',', NUM7, ',', NUM8, ',', NUM9, ',', NUM10) as scoreString2List
+		FROM vibra_service
+		WHERE AGENCY = #{agency} 
+		AND PV = #{pv}
+		ORDER BY DATE ASC
+	</select>
+	<!-- 홍두표 ./////end -->
+	
+	
+	
+	<!--바이브라 데이터 넣기 -->
+	<insert id="vibraInsertData" parameterType="VibraInsertDTO">
+		INSERT INTO VIBRA_SERVICE
+		(
+		DATE,
+		AGENCY,
+		NAME,
+		AGE,
+		SEX,
+		EQUIPMENT,
+		ID,
+		JUMIN,
+		PV,
+		NUM1,NUM2,NUM3,NUM4,NUM5,NUM6,NUM7,NUM8,NUM9,NUM10
+		)
+		VALUES
+		<foreach item="vibraDtoList" index="index" collection="vibraDtoList" separator=",">
+		(
+		#{vibraDtoList.date},
+		#{vibraDtoList.agency},
+		#{vibraDtoList.name},
+		#{vibraDtoList.age},
+		#{vibraDtoList.sex},
+		#{vibraDtoList.equipment},
+		#{vibraDtoList.id},
+		#{vibraDtoList.jumin},
+		#{vibraDtoList.pv},
+		<foreach item="scoreList" index="index" collection="vibraDtoList.scoreList" separator=",">
+			#{scoreList}
+		</foreach>
+		)
+	</foreach>
+	</insert>
+	
+	<!-- 서비스만족도 - 전송 전 겹치는 데이터 삭제  -->
+	<delete id="deleteServiceRow" parameterType="ServiceInsertDTO">
+		DELETE FROM service_env_satisfaction
+		WHERE OPENDAY = #{openday}
+		AND AGENCY = #{agency}
+		AND EVAL_DATE = #{eval_date}
+	</delete>
+	
+	<!-- 프로그램 만족도 - 전송 전 겹치는 데이터 삭제  -->
+	<delete id="deleteProgramRow" parameterType="ProgramInsertDTO">
+		DELETE FROM program_satisfaction
+		WHERE OPENDAY = #{openday}
+		AND AGENCY = #{agency}
+		AND EVAL_DATE = #{eval_date}
+		AND BUNYA = #{bunya}
+		AND PROGRAM_NAME = #{program_name}
+	</delete>
+	
+	<!-- 상담&치유 서비스 - 전송 전 겹치는 데이터 삭제  -->
+	<delete id="deleteCounselRow" parameterType="CounselInsertDTO">
+		DELETE FROM counsel_service
+		WHERE OPENDAY = #{openday}
+		AND AGENCY = #{agency}
+		AND PV = #{pv}
+	</delete>
+	
+	<!-- 힐링 서비스 - 전송 전 겹치는 데이터 삭제  -->
+	<delete id="deleteHealingRow" parameterType="HealingInsertDTO">
+		DELETE FROM healing_service
+		WHERE OPENDAY = #{openday}
+		AND AGENCY = #{agency}
+		AND PV = #{pv}
+	</delete>
+	
+	<!-- 예방 서비스 - 전송 전 겹치는 데이터 삭제  -->
+	<delete id="deletePreventRow" parameterType="PreventInsertDTO">
+		DELETE FROM prevent_service
+		WHERE OPENDAY = #{openday}
+		AND AGENCY = #{agency}
+		AND PV = #{pv}
+	</delete>
+	
+	<!-- hrv - 전송 전 겹치는 데이터 삭제  -->
+	<delete id="deleteHrvRow" parameterType="HrvInsertDTO">
+		DELETE FROM hrv_service
+		WHERE AGENCY = #{agency}
+		AND PV = #{pv}
+	</delete>
+	
+	<!-- vibra - 전송 전 겹치는 데이터 삭제  -->
+	<delete id="deleteVibraRow" parameterType="VibraInsertDTO">
+		DELETE FROM vibra_service
+		WHERE AGENCY = #{agency}
+		AND PV = #{pv}
+	</delete>
+
+	<!-- 프로그램은 최대 7개까지만 가능함 - 기관명 + 시작일자로 프로그램 개수 가져오기 -->
+	<select id="getProgramCount" parameterType="ProgramInsertDTO"
+	resultType="int">
+		SELECT 
+			COUNT(distinct PROGRAM_NAME)
+		FROM foresthealing.program_satisfaction
+		WHERE AGENCY = #{agency}
+		AND OPENDAY = #{openday}
+	</select>
+	
+</mapper>
+
+

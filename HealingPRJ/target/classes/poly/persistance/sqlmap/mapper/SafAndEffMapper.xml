@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="poly.persistance.mapper.ISafAndEffMapper">
+	
+	<select id="getprogramList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT *
+		FROM PROGRAM_SATISFACTION
+		WHERE AGENCY = #{agency} 
+	</select>
+	
+	<select id="getprogramAvgList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		IFNULL(ROUND(AVG(nullif(score1,0)),2),0) as score1,IFNULL(ROUND(AVG(nullif(score2,0)),2),0) as score2, IFNULL(ROUND(AVG(nullif(score3,0)),2),0) as score3,  IFNULL(ROUND(AVG(nullif(score4,0)),2),0) as score4,  IFNULL(ROUND(AVG(nullif(score5,0)),2),0) as score5,
+		IFNULL(ROUND(AVG(nullif(score6,0)),2),0) as score6,IFNULL(ROUND(AVG(nullif(score7,0)),2),0) as score7,IFNULL(ROUND(AVG(nullif(score8,0)),2),0) as score8,  IFNULL(ROUND(AVG(nullif(score9,0)),2),0) as score9
+		FROM PROGRAM_SATISFACTION
+		WHERE AGENCY = #{agency} AND AGE !=0
+	</select>
+	
+	<select id="getFaciltyList" parameterType="ServiceInsertDTO" resultType="ServiceInsertDTO">
+		SELECT *
+		FROM SERVICE_ENV_SATISFACTION
+		WHERE AGENCY = #{agency} 
+	</select>
+	
+	<select id="getAvgFacilityList" parameterType="ServiceInsertDTO" resultType="ServiceInsertDTO">
+		SELECT IFNULL(ROUND(AVG(nullif(score1,0)),2),0) as score1,IFNULL(ROUND(AVG(nullif(score2,0)),2),0) as score2, IFNULL(ROUND(AVG(nullif(score3,0)),2),0) as score3, IFNULL(ROUND(AVG(nullif(score4,0)),2),0) as score4, 
+				IFNULL(ROUND(AVG(nullif(score5,0)),2),0) as score5,IFNULL(ROUND(AVG(nullif(score6,0)),2),0) as score6,IFNULL(ROUND(AVG(nullif(score7,0)),2),0) as score7,IFNULL(ROUND(AVG(nullif(score8,0)),2),0) as score8,
+				IFNULL(ROUND(AVG(nullif(score9,0)),2) ,0)as score9,IFNULL(ROUND(AVG(nullif(score10,0)),2),0) as score10,IFNULL(ROUND(AVG(nullif(score11,0)),2),0) as score11,IFNULL(ROUND(AVG(nullif(score12,0)),2),0) as score12,
+				IFNULL(ROUND(AVG(nullif(score13,0)),2),0) as score13,IFNULL(ROUND(AVG(nullif(score14,0)),2),0) as score14,IFNULL(ROUND(AVG(nullif(score15,0)),2),0) as score15,IFNULL(ROUND(AVG(nullif(score16,0)),2),0) as score16,
+				ifnull(ROUND(AVG(nullif(score17,0)),2),0) as score17,IFNULL(ifnull(ROUND(AVG(nullif(score18,0)),2),0),0) as score18
+		FROM SERVICE_ENV_SATISFACTION
+		WHERE AGENCY = #{agency} AND AGE !=0
+	</select>
+	
+	 <select id="getPrpPreventList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		NAME, SEX,AGE,RESIDENCE,JOB,PV,
+		SCORE1,SCORE2,SCORE3,SCORE4,SCORE5,SCORE6,SCORE7,SCORE8,SCORE9,SCORE1,SCORE10,
+		SCORE11,SCORE12,SCORE13,SCORE14,SCORE15,SCORE16,SCORE17,SCORE18,SCORE19,SCORE20,PTCPROGRAM,PAST_STRESS_EXPERIENCE,
+		ROUND((ps.SCORE1+ps.SCORE2+ps.SCORE3)/3,1)as avg1,ROUND((ps.SCORE4+ps.SCORE5+ps.SCORE6)/3,1)as avg2,ROUND((ps.SCORE7+ps.SCORE8+ps.SCORE9+ps.SCORE10)/4,1)as avg3,
+		ROUND((ps.SCORE11+ps.SCORE12)/2,1)as avg4,ROUND((ps.SCORE13+ps.SCORE14+ps.SCORE15+ps.SCORE16+ps.SCORE17)/5,1) as avg5,ROUND((ps.SCORE18+ps.SCORE19+ps.SCORE20)/3,1)as avg6
+		FROM PREVENT_SERVICE ps
+		WHERE AGENCY = #{agency} AND PV="사전" AND AGE !=0
+		ORDER BY NAME 
+	</select> 
+	
+	 <select id="getAftPreventList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		NAME, SEX,AGE,RESIDENCE,JOB,PV,
+		SCORE1,SCORE2,SCORE3,SCORE4,SCORE5,SCORE6,SCORE7,SCORE8,SCORE9,SCORE1,SCORE10,
+		SCORE11,SCORE12,SCORE13,SCORE14,SCORE15,SCORE16,SCORE17,SCORE18,SCORE19,SCORE20,PTCPROGRAM,PAST_STRESS_EXPERIENCE,
+		ROUND((ps.SCORE1+ps.SCORE2+ps.SCORE3)/3,1)as avg1,ROUND((ps.SCORE4+ps.SCORE5+ps.SCORE6)/3,1)as avg2,ROUND((ps.SCORE7+ps.SCORE8+ps.SCORE9+ps.SCORE10)/4,1)as avg3,
+		ROUND((ps.SCORE11+ps.SCORE12)/2,1)as avg4,ROUND((ps.SCORE13+ps.SCORE14+ps.SCORE15+ps.SCORE16+ps.SCORE17)/5,1) as avg5,ROUND((ps.SCORE18+ps.SCORE19+ps.SCORE20)/3,1)as avg6
+		FROM PREVENT_SERVICE ps
+		WHERE AGENCY = #{agency} AND PV="사후" AND AGE !=0
+		ORDER BY NAME 
+	</select> 
+	<select id="getAvgProPreventList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		ROUND(AVG(SCORE1),2) as score1,ROUND(AVG(SCORE2),2) as score2, ROUND(AVG(SCORE3),2) as score3, ROUND(AVG(SCORE4),2) as score4, ROUND(AVG(SCORE5),2) as score5,ROUND(AVG(SCORE6),2) as score6,
+				ROUND(AVG(SCORE7),2) as score7,ROUND(AVG(SCORE8),2) as score8,ROUND(AVG(SCORE9),2) as score9,ROUND(AVG(SCORE10),2) as score10,ROUND(AVG(SCORE11),2) as score11,ROUND(AVG(SCORE12),2) as score12,ROUND(AVG(SCORE1),2) as score13,
+				ROUND(AVG(SCORE14),2) as score14,ROUND(AVG(SCORE15),2) as score15,ROUND(AVG(SCORE16),2) as score16,ROUND(AVG(SCORE17),2) as score17,ROUND(AVG(SCORE18),2) as score18,ROUND(AVG(SCORE19),2) as score19
+				,ROUND(AVG(SCORE20),2) as score20,ROUND((AVG(score1)+AVG(score2)+AVG(score3))/3,2)as avg1
+                ,ROUND((AVG(score6)+AVG(score4)+AVG(score5))/3,2)as avg2,ROUND((AVG(score10)+AVG(score7)+AVG(score8)+AVG(score9))/4,2)as avg3,ROUND((AVG(score11)+AVG(score12))/2,2)as avg4
+                ,ROUND((AVG(score17)+AVG(score13)+AVG(score14)+AVG(score15)+AVG(score16))/5,2)as avg5,ROUND((AVG(score18)+AVG(score20)+AVG(score19))/3,2)as avg6
+		FROM PREVENT_SERVICE 
+		WHERE AGENCY = #{agency} AND PV="사전" AND AGE !=0
+		ORDER BY NAME 
+	</select> 
+	
+	 <select id="getAvgAftPreventList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		ROUND(AVG(SCORE1),2) as score1,ROUND(AVG(SCORE2),2) as score2, ROUND(AVG(SCORE3),2) as score3, ROUND(AVG(SCORE4),2) as score4, ROUND(AVG(SCORE5),2) as score5,ROUND(AVG(SCORE6),2) as score6,
+				ROUND(AVG(SCORE7),2) as score7,ROUND(AVG(SCORE8),2) as score8,ROUND(AVG(SCORE9),2) as score9,ROUND(AVG(SCORE10),2) as score10,ROUND(AVG(SCORE11),2) as score11,ROUND(AVG(SCORE12),2) as score12,ROUND(AVG(SCORE1),2) as score13,
+				ROUND(AVG(SCORE14),2) as score14,ROUND(AVG(SCORE15),2) as score15,ROUND(AVG(SCORE16),2) as score16,ROUND(AVG(SCORE17),2) as score17,ROUND(AVG(SCORE18),2) as score18,ROUND(AVG(SCORE19),2) as score19
+				,ROUND(AVG(SCORE20),2) as score20,ROUND((AVG(score1)+AVG(score2)+AVG(score3))/3,2)as avg1
+                ,ROUND((AVG(score6)+AVG(score4)+AVG(score5))/3,2)as avg2,ROUND((AVG(score10)+AVG(score7)+AVG(score8)+AVG(score9))/4,2)as avg3,ROUND((AVG(score11)+AVG(score12))/2,2)as avg4
+                ,ROUND((AVG(score17)+AVG(score13)+AVG(score14)+AVG(score15)+AVG(score16))/5,2)as avg5,ROUND((AVG(score18)+AVG(score20)+AVG(score19))/3,2)as avg6
+		FROM PREVENT_SERVICE 
+		WHERE AGENCY = #{agency} AND PV="사후" AND AGE !=0
+		ORDER BY NAME 
+	</select> 
+	
+	 <select id="getProHealAvgList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		ROUND(AVG(SCORE1),2) as score1,ROUND(AVG(SCORE2),2) as score2, ROUND(AVG(SCORE3),2) as score3, ROUND(AVG(SCORE4),2) as score4, ROUND(AVG(SCORE5),2) as score5,ROUND(AVG(SCORE6),2) as score6,
+				ROUND(AVG(SCORE7),2) as score7,ROUND(AVG(SCORE8),2) as score8,ROUND(AVG(SCORE9),2) as score9,ROUND(AVG(SCORE10),2) as score10,ROUND(AVG(SCORE11),2) as score11,ROUND(AVG(SCORE12),2) as score12,ROUND(AVG(SCORE1),2) as score13,
+				ROUND(AVG(SCORE14),2) as score14,ROUND(AVG(SCORE15),2) as score15,ROUND(AVG(SCORE16),2) as score16,ROUND(AVG(SCORE17),2) as score17,ROUND(AVG(SCORE18),2) as score18,ROUND(AVG(SCORE19),2) as score19
+				,ROUND(AVG(SCORE20),2) as score20,ROUND(AVG(SCORE21),2) as score21,ROUND(AVG(SCORE22),2) as score22,ROUND((AVG(score1)+AVG(score2))/2,2)as avg1
+                ,ROUND((AVG(score3)+AVG(score4)+AVG(score5))/3,2)as avg2,ROUND((AVG(score6)+AVG(score7)+AVG(score8)+AVG(score9))/4,2)as avg3,ROUND((AVG(score10)+AVG(score11)+AVG(score12))/3,2)as avg4
+                ,ROUND((AVG(score13)+AVG(score14)+AVG(score15)+AVG(score16))/4,2)as avg5,ROUND((AVG(score18)+AVG(score17)+AVG(score19))/3,2)as avg6,ROUND((AVG(score20)+AVG(score21)+AVG(score22))/3,2)as avg7
+		FROM HEALING_SERVICE 
+		WHERE AGENCY = #{agency} AND PV="사전" AND AGE !=0
+	</select> 
+	
+	 <select id="getAftHealAvgList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		ROUND(AVG(SCORE1),2) as score1,ROUND(AVG(SCORE2),2) as score2, ROUND(AVG(SCORE3),2) as score3, ROUND(AVG(SCORE4),2) as score4, ROUND(AVG(SCORE5),2) as score5,ROUND(AVG(SCORE6),2) as score6,
+				ROUND(AVG(SCORE7),2) as score7,ROUND(AVG(SCORE8),2) as score8,ROUND(AVG(SCORE9),2) as score9,ROUND(AVG(SCORE10),2) as score10,ROUND(AVG(SCORE11),2) as score11,ROUND(AVG(SCORE12),2) as score12,ROUND(AVG(SCORE1),2) as score13,
+				ROUND(AVG(SCORE14),2) as score14,ROUND(AVG(SCORE15),2) as score15,ROUND(AVG(SCORE16),2) as score16,ROUND(AVG(SCORE17),2) as score17,ROUND(AVG(SCORE18),2) as score18,ROUND(AVG(SCORE19),2) as score19
+				,ROUND(AVG(SCORE20),2) as score20,ROUND(AVG(SCORE21),2) as score21,ROUND(AVG(SCORE22),2) as score22,ROUND((AVG(score1)+AVG(score2))/2,2)as avg1
+                ,ROUND((AVG(score3)+AVG(score4)+AVG(score5))/3,2)as avg2,ROUND((AVG(score6)+AVG(score7)+AVG(score8)+AVG(score9))/4,2)as avg3,ROUND((AVG(score10)+AVG(score11)+AVG(score12))/3,2)as avg4
+                ,ROUND((AVG(score13)+AVG(score14)+AVG(score15)+AVG(score16))/4,2)as avg5,ROUND((AVG(score18)+AVG(score17)+AVG(score19))/3,2)as avg6,ROUND((AVG(score20)+AVG(score21)+AVG(score22))/3,2)as avg7
+		FROM HEALING_SERVICE 
+		WHERE AGENCY = #{agency} AND PV="사후" AND AGE !=0
+	</select> 
+	
+	 <select id="getProHealList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		NAME, SEX,AGE,RESIDENCE,JOB,PV,PTCPROGRAM,PAST_STRESS_EXPERIENCE,
+		SCORE1,SCORE2,SCORE3,SCORE4,SCORE5,SCORE6,SCORE7,SCORE8,SCORE9,SCORE1,SCORE10,
+		SCORE11,SCORE12,SCORE13,SCORE14,SCORE15,SCORE16,SCORE17,SCORE18,SCORE19,SCORE20,SCORE21,SCORE22,
+		ROUND((ps.SCORE1+ps.SCORE2)/2,1)as avg1,ROUND((ps.SCORE3+ps.SCORE4+ps.SCORE5)/3,1)as avg2,ROUND((ps.SCORE6+ps.SCORE7+ps.SCORE8+ps.SCORE9)/4,1)as avg3,
+		ROUND((ps.SCORE10+ps.SCORE11+ps.SCORE12)/3,1)as avg4,ROUND((ps.SCORE13+ps.SCORE14+ps.SCORE15+ps.SCORE16)/4,1)as avg5, ROUND((ps.SCORE19+ps.SCORE17+ps.SCORE18)/3,1)as avg6,
+		ROUND((ps.SCORE22+ps.SCORE20+ps.SCORE21)/3,1)as avg7
+		FROM HEALING_SERVICE ps
+		WHERE AGENCY = #{agency} AND PV="사전" AND AGE !=0
+		ORDER BY NAME
+	</select> 
+	
+	 <select id="getAftHealList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		NAME, SEX,AGE,RESIDENCE,JOB,PV,PTCPROGRAM,PAST_STRESS_EXPERIENCE,
+		SCORE1,SCORE2,SCORE3,SCORE4,SCORE5,SCORE6,SCORE7,SCORE8,SCORE9,SCORE1,SCORE10,
+		SCORE11,SCORE12,SCORE13,SCORE14,SCORE15,SCORE16,SCORE17,SCORE18,SCORE19,SCORE20,SCORE21,SCORE22,
+		ROUND((ps.SCORE1+ps.SCORE2)/2,1)as avg1,ROUND((ps.SCORE3+ps.SCORE4+ps.SCORE5)/3,1)as avg2,ROUND((ps.SCORE6+ps.SCORE7+ps.SCORE8+ps.SCORE9)/4,1)as avg3,
+		ROUND((ps.SCORE10+ps.SCORE11+ps.SCORE12)/3,1)as avg4,ROUND((ps.SCORE13+ps.SCORE14+ps.SCORE15+ps.SCORE16)/4,1)as avg5, ROUND((ps.SCORE19+ps.SCORE17+ps.SCORE18)/3,1)as avg6,
+		 ROUND((ps.SCORE22+ps.SCORE20+ps.SCORE21)/3,1)as avg7
+		FROM HEALING_SERVICE ps
+		WHERE AGENCY = #{agency} AND PV="사후" AND AGE !=0
+		ORDER BY NAME
+	</select> 
+	
+	
+	
+	 <select id="getProCounselList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT OPENDAY,NAME,AGE,RESIDENCE,JOB,PV,PAST_STRESS_EXPERIENCE,COUNSEL_CONTENTS,SEX,
+		ROUND((ps.SCORE1+ps.SCORE2)/2,2)as score1,ROUND((ps.SCORE3+ps.SCORE4+ps.SCORE5)/3,2)as score2,ROUND((ps.SCORE6+ps.SCORE7)/2,2)as score3,
+		ROUND((ps.SCORE8+ps.SCORE9+ps.SCORE10)/3,2)as score4, ROUND((ps.SCORE11+ps.SCORE12+ps.SCORE13)/3,2)as score5, ROUND((ps.SCORE14+ps.SCORE15+ps.SCORE16+ps.SCORE17)/4,2)as score6,
+		ROUND((ps.SCORE18+ps.SCORE19+ps.SCORE20+ps.SCORE21+ps.SCORE22+ps.SCORE23)/6,2)as score7, ROUND((ps.SCORE24+ps.SCORE25+ps.SCORE26)/3,2)as score8, ROUND((ps.SCORE27+ps.SCORE28+ps.SCORE29)/3,2)as score9,
+		ROUND((ps.SCORE30+ps.SCORE31+ps.SCORE32+ps.SCORE33+ps.SCORE34+ps.SCORE35)/6,2)as score10, ROUND((ps.SCORE36+ps.SCORE37+ps.SCORE38)/3,2)as score11,ROUND((ps.SCORE39+ps.SCORE40+ps.SCORE41+ps.SCORE42)/4,2)as score12,
+		ROUND((ps.SCORE43+ps.SCORE44)/2,2)as score13,ROUND((ps.SCORE45+ps.SCORE46+ps.SCORE47)/3,2)as score14,ROUND((ps.SCORE48+ps.SCORE49+ps.SCORE50)/3,2)as score15 ,ROUND((ps.SCORE51+ps.SCORE52+ps.SCORE53+ps.SCORE54)/4,2)as score16
+		,ROUND((ps.SCORE55+ps.SCORE56+ps.SCORE57)/3,2)as score17,ROUND((ps.SCORE58+ps.SCORE59+ps.SCORE60)/3,2)as score18 ,ROUND((ps.SCORE61+ps.SCORE62)/2,2)as score19
+		FROM COUNSEL_SERVICE ps
+		WHERE AGENCY = #{agency} AND PV="사전"  AND AGE !=0
+		ORDER BY NAME
+	</select>
+	 <select id="getMidCounselList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT OPENDAY,NAME,AGE,RESIDENCE,JOB,PV,PAST_STRESS_EXPERIENCE,COUNSEL_CONTENTS,SEX,
+		ROUND((ps.SCORE1+ps.SCORE2)/2,2)as score1,ROUND((ps.SCORE3+ps.SCORE4+ps.SCORE5)/3,2)as score2,ROUND((ps.SCORE6+ps.SCORE7)/2,2)as score3,
+		ROUND((ps.SCORE8+ps.SCORE9+ps.SCORE10)/3,2)as score4, ROUND((ps.SCORE11+ps.SCORE12+ps.SCORE13)/3,2)as score5, ROUND((ps.SCORE14+ps.SCORE15+ps.SCORE16+ps.SCORE17)/4,2)as score6,
+		ROUND((ps.SCORE18+ps.SCORE19+ps.SCORE20+ps.SCORE21+ps.SCORE22+ps.SCORE23)/6,2)as score7, ROUND((ps.SCORE24+ps.SCORE25+ps.SCORE26)/3,2)as score8, ROUND((ps.SCORE27+ps.SCORE28+ps.SCORE29)/3,2)as score9,
+		ROUND((ps.SCORE30+ps.SCORE31+ps.SCORE32+ps.SCORE33+ps.SCORE34+ps.SCORE35)/6,2)as score10, ROUND((ps.SCORE36+ps.SCORE37+ps.SCORE38)/3,2)as score11,ROUND((ps.SCORE39+ps.SCORE40+ps.SCORE41+ps.SCORE42)/4,2)as score12,
+		ROUND((ps.SCORE43+ps.SCORE44)/2,2)as score13,ROUND((ps.SCORE45+ps.SCORE46+ps.SCORE47)/3,2)as score14,ROUND((ps.SCORE48+ps.SCORE49+ps.SCORE50)/3,2)as score15 ,ROUND((ps.SCORE51+ps.SCORE52+ps.SCORE53+ps.SCORE54)/4,2)as score16
+		,ROUND((ps.SCORE55+ps.SCORE56+ps.SCORE57)/3,2)as score17,ROUND((ps.SCORE58+ps.SCORE59+ps.SCORE60)/3,2)as score18 ,ROUND((ps.SCORE61+ps.SCORE62)/2,2)as score19
+		FROM COUNSEL_SERVICE ps
+		WHERE AGENCY = #{agency} AND PV="중간"  AND AGE !=0
+		ORDER BY NAME
+	</select>
+	 <select id="getAftCounselList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT OPENDAY,NAME,AGE,RESIDENCE,JOB,PV,PAST_STRESS_EXPERIENCE,COUNSEL_CONTENTS,SEX,
+		ROUND((ps.SCORE1+ps.SCORE2)/2,2)as score1,ROUND((ps.SCORE3+ps.SCORE4+ps.SCORE5)/3,2)as score2,ROUND((ps.SCORE6+ps.SCORE7)/2,2)as score3,
+		ROUND((ps.SCORE8+ps.SCORE9+ps.SCORE10)/3,2)as score4, ROUND((ps.SCORE11+ps.SCORE12+ps.SCORE13)/3,2)as score5, ROUND((ps.SCORE14+ps.SCORE15+ps.SCORE16+ps.SCORE17)/4,2)as score6,
+		ROUND((ps.SCORE18+ps.SCORE19+ps.SCORE20+ps.SCORE21+ps.SCORE22+ps.SCORE23)/6,2)as score7, ROUND((ps.SCORE24+ps.SCORE25+ps.SCORE26)/3,2)as score8, ROUND((ps.SCORE27+ps.SCORE28+ps.SCORE29)/3,2)as score9,
+		ROUND((ps.SCORE30+ps.SCORE31+ps.SCORE32+ps.SCORE33+ps.SCORE34+ps.SCORE35)/6,2)as score10, ROUND((ps.SCORE36+ps.SCORE37+ps.SCORE38)/3,2)as score11,ROUND((ps.SCORE39+ps.SCORE40+ps.SCORE41+ps.SCORE42)/4,2)as score12,
+		ROUND((ps.SCORE43+ps.SCORE44)/2,2)as score13,ROUND((ps.SCORE45+ps.SCORE46+ps.SCORE47)/3,2)as score14,ROUND((ps.SCORE48+ps.SCORE49+ps.SCORE50)/3,2)as score15 ,ROUND((ps.SCORE51+ps.SCORE52+ps.SCORE53+ps.SCORE54)/4,2)as score16
+		,ROUND((ps.SCORE55+ps.SCORE56+ps.SCORE57)/3,2)as score17,ROUND((ps.SCORE58+ps.SCORE59+ps.SCORE60)/3,2)as score18 ,ROUND((ps.SCORE61+ps.SCORE62)/2,2)as score19
+		FROM COUNSEL_SERVICE ps
+		WHERE AGENCY = #{agency} AND PV="사후"  AND AGE !=0
+		ORDER BY NAME
+	</select>
+	
+	 <select id="getCounselSessionList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		NAME,AGE,SESSION
+		FROM COUNSEL_SERVICE 
+		WHERE AGENCY = #{agency}
+		ORDER BY NAME
+	</select>
+	
+<!-- =================================================================================================검색기능================================================================================================= -->
+	 <select id="getSer_Program" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		SCORE1,SCORE2,SCORE3,SCORE4,SCORE5,SCORE6,SCORE7,SCORE8,SCORE9
+		FROM PROGRAM_SATISFACTION
+		WHERE AGENCY LIKE #{agency} AND SEX LIKE #{sex} AND AGE LIKE #{age}  AND RESIDENCE LIKE #{residence}
+			  AND JOB LIKE #{job} AND OPENDAY LIKE #{openday} AND PROGRAM_NAME LIKE #{program_name} AND TEACHER LIKE #{teacher} AND BUNYA LIKE #{bunya}
+			  AND PLACE LIKE #{place}
+	</select> 
+	
+	<select id="getSer_Avg_Program" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		IFNULL(ROUND(AVG(nullif(score1,0)),2),0) as score1,IFNULL(ROUND(AVG(nullif(score2,0)),2),0) as score2, IFNULL(ROUND(AVG(nullif(score3,0)),2),0) as score3,  IFNULL(ROUND(AVG(nullif(score4,0)),2),0) as score4,  IFNULL(ROUND(AVG(nullif(score5,0)),2),0) as score5,
+		IFNULL(ROUND(AVG(nullif(score6,0)),2),0) as score6,IFNULL(ROUND(AVG(nullif(score7,0)),2),0) as score7,IFNULL(ROUND(AVG(nullif(score8,0)),2),0) as score8,  IFNULL(ROUND(AVG(nullif(score9,0)),2),0) as score9
+		FROM PROGRAM_SATISFACTION
+		WHERE AGENCY LIKE #{agency} AND SEX LIKE #{sex} AND AGE LIKE #{age}  AND RESIDENCE LIKE #{residence}
+			  AND JOB LIKE #{job} AND OPENDAY LIKE #{openday} AND PROGRAM_NAME LIKE #{program_name} AND TEACHER LIKE #{teacher} AND BUNYA LIKE #{bunya}
+			  AND PLACE LIKE #{place} 
+	</select>
+	
+	 <select id="getSer_Service" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		SCORE1,SCORE2,SCORE3,SCORE4,SCORE5,SCORE6,SCORE7,SCORE8,SCORE9,
+		SCORE10,SCORE11,SCORE12,SCORE13,SCORE14,SCORE15,SCORE16,SCORE17,SCORE18,FACILITY_OPINION, OPERATION_OPINION
+		FROM SERVICE_ENV_SATISFACTION
+		WHERE AGENCY LIKE #{agency} AND SEX LIKE #{sex} AND AGE LIKE #{age}  AND RESIDENCE LIKE #{residence}
+				AND JOB LIKE #{job} AND OPENDAY LIKE #{openday} 
+	</select> 
+	
+	 <select id="getSer_Avg_Service" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+				IFNULL(ROUND(AVG(nullif(score1,0)),2),0) as score1,IFNULL(ROUND(AVG(nullif(score2,0)),2),0) as score2, IFNULL(ROUND(AVG(nullif(score3,0)),2),0) as score3,  IFNULL(ROUND(AVG(nullif(score4,0)),2),0) as score4,  IFNULL(ROUND(AVG(nullif(score5,0)),2),0) as score5,
+		IFNULL(ROUND(AVG(nullif(score6,0)),2),0) as score6,IFNULL(ROUND(AVG(nullif(score7,0)),2),0) as score7,IFNULL(ROUND(AVG(nullif(score8,0)),2),0) as score8,IFNULL(ROUND(AVG(nullif(score9,0)),2),0) as score9,IFNULL(ROUND(AVG(nullif(score10,0)),2),0) as score10,IFNULL(ROUND(AVG(nullif(score11,0)),2),0) as score11,
+		 IFNULL(ROUND(AVG(nullif(score12,0)),2),0) as score12,  IFNULL(ROUND(AVG(nullif(score13,0)),2),0) as score13,  IFNULL(ROUND(AVG(nullif(score14,0)),2),0) as score14,
+		IFNULL(ROUND(AVG(nullif(score15,0)),2),0) as score15,IFNULL(ROUND(AVG(nullif(score16,0)),2),0) as score16,IFNULL(ROUND(AVG(nullif(score17,0)),2),0) as score17,  IFNULL(ROUND(AVG(nullif(score18,0)),2),0) as score18
+		FROM SERVICE_ENV_SATISFACTION
+		WHERE AGENCY LIKE #{agency} AND SEX LIKE #{sex} AND AGE LIKE #{age}  AND RESIDENCE LIKE #{residence}
+				AND JOB LIKE #{job} AND OPENDAY LIKE #{openday} 
+	</select> 
+	
+	 <select id="getSer_ProHealList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		NAME,AGE,
+		SCORE1,SCORE2,SCORE3,SCORE4,SCORE5,SCORE6,SCORE7,SCORE8,SCORE9,SCORE1,SCORE10,
+		SCORE11,SCORE12,SCORE13,SCORE14,SCORE15,SCORE16,SCORE17,SCORE18,SCORE19,SCORE20,SCORE21,SCORE22,
+		ROUND((ps.SCORE1+ps.SCORE2)/2,1)as avg1,ROUND((ps.SCORE3+ps.SCORE4+ps.SCORE5)/3,1)as avg2,ROUND((ps.SCORE6+ps.SCORE7+ps.SCORE8+ps.SCORE9)/4,1)as avg3,
+		ROUND((ps.SCORE10+ps.SCORE11+ps.SCORE12)/3,1)as avg4,ROUND((ps.SCORE13+ps.SCORE14+ps.SCORE15+ps.SCORE16)/4,1)as avg5, ROUND((ps.SCORE19+ps.SCORE17+ps.SCORE18)/3,1)as avg6,
+		 ROUND((ps.SCORE22+ps.SCORE20+ps.SCORE21)/3,1)as avg7
+		FROM HEALING_SERVICE ps
+		WHERE AGENCY LIKE #{agency} AND SEX LIKE #{sex} AND AGE LIKE #{age}  AND RESIDENCE LIKE #{residence}
+				AND JOB LIKE #{job} AND OPENDAY LIKE #{openday} AND pv="사전"
+	</select> 
+	
+	 <select id="getSer_AftHealList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		NAME,AGE,
+		SCORE1,SCORE2,SCORE3,SCORE4,SCORE5,SCORE6,SCORE7,SCORE8,SCORE9,SCORE1,SCORE10,
+		SCORE11,SCORE12,SCORE13,SCORE14,SCORE15,SCORE16,SCORE17,SCORE18,SCORE19,SCORE20,SCORE21,SCORE22,
+		ROUND((ps.SCORE1+ps.SCORE2)/2,1)as avg1,ROUND((ps.SCORE3+ps.SCORE4+ps.SCORE5)/3,1)as avg2,ROUND((ps.SCORE6+ps.SCORE7+ps.SCORE8+ps.SCORE9)/4,1)as avg3,
+		ROUND((ps.SCORE10+ps.SCORE11+ps.SCORE12)/3,1)as avg4,ROUND((ps.SCORE13+ps.SCORE14+ps.SCORE15+ps.SCORE16)/4,1)as avg5, ROUND((ps.SCORE19+ps.SCORE17+ps.SCORE18)/3,1)as avg6,
+		 ROUND((ps.SCORE22+ps.SCORE20+ps.SCORE21)/3,1)as avg7
+		FROM HEALING_SERVICE ps
+		WHERE AGENCY LIKE #{agency} AND SEX LIKE #{sex} AND AGE LIKE #{age}  AND RESIDENCE LIKE #{residence}
+				AND JOB LIKE #{job} AND OPENDAY LIKE #{openday} AND pv="사후"
+	</select> 
+	
+	 
+	
+	 <select id="getSer_Avg_ProHealList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		NAME,AGE,
+		ROUND(AVG(SCORE1),2) as score1,ROUND(AVG(SCORE2),2) as score2, ROUND(AVG(SCORE3),2) as score3, ROUND(AVG(SCORE4),2) as score4, ROUND(AVG(SCORE5),2) as score5,ROUND(AVG(SCORE6),2) as score6,
+				ROUND(AVG(SCORE7),2) as score7,ROUND(AVG(SCORE8),2) as score8,ROUND(AVG(SCORE9),2) as score9,ROUND(AVG(SCORE10),2) as score10,ROUND(AVG(SCORE11),2) as score11,ROUND(AVG(SCORE12),2) as score12,ROUND(AVG(SCORE1),2) as score13,
+				ROUND(AVG(SCORE14),2) as score14,ROUND(AVG(SCORE15),2) as score15,ROUND(AVG(SCORE16),2) as score16,ROUND(AVG(SCORE17),2) as score17,ROUND(AVG(SCORE18),2) as score18,ROUND(AVG(SCORE19),2) as score19
+				,ROUND(AVG(SCORE20),2) as score20,ROUND(AVG(SCORE21),2) as score21,ROUND(AVG(SCORE22),2) as score22,ROUND((AVG(score1)+AVG(score2))/2,2)as avg1
+                ,ROUND((AVG(score3)+AVG(score4)+AVG(score5))/3,2)as avg2,ROUND((AVG(score6)+AVG(score7)+AVG(score8)+AVG(score9))/4,2)as avg3,ROUND((AVG(score10)+AVG(score11)+AVG(score12))/3,2)as avg4
+                ,ROUND((AVG(score13)+AVG(score14)+AVG(score15)+AVG(score16))/4,2)as avg5,ROUND((AVG(score18)+AVG(score17)+AVG(score19))/3,2)as avg6,ROUND((AVG(score20)+AVG(score21)+AVG(score22))/3,2)as avg7
+		FROM HEALING_SERVICE 
+		WHERE AGENCY LIKE #{agency} AND SEX LIKE #{sex} AND AGE LIKE #{age}  AND RESIDENCE LIKE #{residence}
+				AND JOB LIKE #{job} AND OPENDAY LIKE #{openday} AND pv="사전"
+	</select> 
+	
+	 <select id="getSer_Avg_AftHealList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		ROUND(AVG(SCORE1),2) as score1,ROUND(AVG(SCORE2),2) as score2, ROUND(AVG(SCORE3),2) as score3, ROUND(AVG(SCORE4),2) as score4, ROUND(AVG(SCORE5),2) as score5,ROUND(AVG(SCORE6),2) as score6,
+				ROUND(AVG(SCORE7),2) as score7,ROUND(AVG(SCORE8),2) as score8,ROUND(AVG(SCORE9),2) as score9,ROUND(AVG(SCORE10),2) as score10,ROUND(AVG(SCORE11),2) as score11,ROUND(AVG(SCORE12),2) as score12,ROUND(AVG(SCORE1),2) as score13,
+				ROUND(AVG(SCORE14),2) as score14,ROUND(AVG(SCORE15),2) as score15,ROUND(AVG(SCORE16),2) as score16,ROUND(AVG(SCORE17),2) as score17,ROUND(AVG(SCORE18),2) as score18,ROUND(AVG(SCORE19),2) as score19
+				,ROUND(AVG(SCORE20),2) as score20,ROUND(AVG(SCORE21),2) as score21,ROUND(AVG(SCORE22),2) as score22,ROUND((AVG(score1)+AVG(score2))/2,2)as avg1
+                ,ROUND((AVG(score3)+AVG(score4)+AVG(score5))/3,2)as avg2,ROUND((AVG(score6)+AVG(score7)+AVG(score8)+AVG(score9))/4,2)as avg3,ROUND((AVG(score10)+AVG(score11)+AVG(score12))/3,2)as avg4
+                ,ROUND((AVG(score13)+AVG(score14)+AVG(score15)+AVG(score16))/4,2)as avg5,ROUND((AVG(score18)+AVG(score17)+AVG(score19))/3,2)as avg6,ROUND((AVG(score20)+AVG(score21)+AVG(score22))/3,2)as avg7
+		FROM HEALING_SERVICE 
+		WHERE AGENCY LIKE #{agency} AND SEX LIKE #{sex} AND AGE LIKE #{age}  AND RESIDENCE LIKE #{residence}
+				AND JOB LIKE #{job} AND OPENDAY LIKE #{openday} AND pv="사후"
+	</select> 
+	
+	 <select id="getSer_ProPreList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT
+		NAME,AGE,
+		SCORE1,SCORE2,SCORE3,SCORE4,SCORE5,SCORE6,SCORE7,SCORE8,SCORE9,SCORE1,SCORE10,
+		SCORE11,SCORE12,SCORE13,SCORE14,SCORE15,SCORE16,SCORE17,SCORE18,SCORE19,SCORE20,
+		ROUND((ps.SCORE1+ps.SCORE2+ps.SCORE3)/3,2)as avg1,ROUND((ps.SCORE6+ps.SCORE4+ps.SCORE5)/3,2)as avg2,ROUND((ps.SCORE10+ps.SCORE7+ps.SCORE8+ps.SCORE9)/4,2)as avg3,
+		ROUND((ps.SCORE11+ps.SCORE12)/2,1)as avg4,ROUND((ps.SCORE13+ps.SCORE14+ps.SCORE15+ps.SCORE16+ps.SCORE17)/5,2)as avg5, ROUND((ps.SCORE19+ps.SCORE20+ps.SCORE18)/3,1)as avg6
+		FROM PREVENT_SERVICE ps
+		WHERE AGENCY LIKE #{agency} AND SEX LIKE #{sex} AND AGE LIKE #{age}  AND RESIDENCE LIKE #{residence}
+				AND JOB LIKE #{job} AND OPENDAY LIKE #{openday} AND pv="사전"
+	</select> 
+	
+	<select id="getSer_AftPreList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		NAME,AGE,
+		SCORE1,SCORE2,SCORE3,SCORE4,SCORE5,SCORE6,SCORE7,SCORE8,SCORE9,SCORE1,SCORE10,
+		SCORE11,SCORE12,SCORE13,SCORE14,SCORE15,SCORE16,SCORE17,SCORE18,SCORE19,SCORE20,
+		ROUND((ps.SCORE1+ps.SCORE2+ps.SCORE3)/3,2)as avg1,ROUND((ps.SCORE6+ps.SCORE4+ps.SCORE5)/3,2)as avg2,ROUND((ps.SCORE10+ps.SCORE7+ps.SCORE8+ps.SCORE9)/4,2)as avg3,
+		ROUND((ps.SCORE11+ps.SCORE12)/2,1)as avg4,ROUND((ps.SCORE13+ps.SCORE14+ps.SCORE15+ps.SCORE16+ps.SCORE17)/5,2)as avg5, ROUND((ps.SCORE19+ps.SCORE20+ps.SCORE18)/3,1)as avg6
+		FROM PREVENT_SERVICE ps
+		WHERE AGENCY LIKE #{agency} AND SEX LIKE #{sex} AND AGE LIKE #{age}  AND RESIDENCE LIKE #{residence}
+				AND JOB LIKE #{job} AND OPENDAY LIKE #{openday} AND pv="사후"
+	</select> 
+	
+	 <select id="getSer_Avg_ProPreList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		ROUND(AVG(SCORE1),2) as score1,ROUND(AVG(SCORE2),2) as score2, ROUND(AVG(SCORE3),2) as score3, ROUND(AVG(SCORE4),2) as score4, ROUND(AVG(SCORE5),2) as score5,ROUND(AVG(SCORE6),2) as score6,
+				ROUND(AVG(SCORE7),2) as score7,ROUND(AVG(SCORE8),2) as score8,ROUND(AVG(SCORE9),2) as score9,ROUND(AVG(SCORE10),2) as score10,ROUND(AVG(SCORE11),2) as score11,ROUND(AVG(SCORE12),2) as score12,ROUND(AVG(SCORE1),2) as score13,
+				ROUND(AVG(SCORE14),2) as score14,ROUND(AVG(SCORE15),2) as score15,ROUND(AVG(SCORE16),2) as score16,ROUND(AVG(SCORE17),2) as score17,ROUND(AVG(SCORE18),2) as score18,ROUND(AVG(SCORE19),2) as score19
+				,ROUND(AVG(SCORE20),2) as score20,ROUND((AVG(score1)+AVG(score2)+AVG(score3))/3,2)as avg1
+                ,ROUND((AVG(score6)+AVG(score4)+AVG(score5))/3,2)as avg2,ROUND((AVG(score10)+AVG(score7)+AVG(score8)+AVG(score9))/4,2)as avg3,ROUND((AVG(score11)+AVG(score12))/2,2)as avg4
+                ,ROUND((AVG(score17)+AVG(score13)+AVG(score14)+AVG(score15)+AVG(score16))/5,2)as avg5,ROUND((AVG(score18)+AVG(score20)+AVG(score19))/3,2)as avg6
+		FROM PREVENT_SERVICE 
+		WHERE AGENCY LIKE #{agency} AND SEX LIKE #{sex} AND AGE LIKE #{age}  AND RESIDENCE LIKE #{residence}
+				AND JOB LIKE #{job} AND OPENDAY LIKE #{openday} AND pv="사전"
+	</select> 
+	
+	 <select id="getSer_Avg_AftPreList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		ROUND(AVG(SCORE1),2) as score1,ROUND(AVG(SCORE2),2) as score2, ROUND(AVG(SCORE3),2) as score3, ROUND(AVG(SCORE4),2) as score4, ROUND(AVG(SCORE5),2) as score5,ROUND(AVG(SCORE6),2) as score6,
+				ROUND(AVG(SCORE7),2) as score7,ROUND(AVG(SCORE8),2) as score8,ROUND(AVG(SCORE9),2) as score9,ROUND(AVG(SCORE10),2) as score10,ROUND(AVG(SCORE11),2) as score11,ROUND(AVG(SCORE12),2) as score12,ROUND(AVG(SCORE1),2) as score13,
+				ROUND(AVG(SCORE14),2) as score14,ROUND(AVG(SCORE15),2) as score15,ROUND(AVG(SCORE16),2) as score16,ROUND(AVG(SCORE17),2) as score17,ROUND(AVG(SCORE18),2) as score18,ROUND(AVG(SCORE19),2) as score19
+				,ROUND(AVG(SCORE20),2) as score20,ROUND((AVG(score1)+AVG(score2)+AVG(score3))/3,2)as avg1
+                ,ROUND((AVG(score6)+AVG(score4)+AVG(score5))/3,2)as avg2,ROUND((AVG(score10)+AVG(score7)+AVG(score8)+AVG(score9))/4,2)as avg3,ROUND((AVG(score11)+AVG(score12))/2,2)as avg4
+                ,ROUND((AVG(score17)+AVG(score13)+AVG(score14)+AVG(score15)+AVG(score16))/5,2)as avg5,ROUND((AVG(score18)+AVG(score20)+AVG(score19))/3,2)as avg6
+		FROM PREVENT_SERVICE 
+		WHERE AGENCY LIKE #{agency} AND SEX LIKE #{sex} AND AGE LIKE #{age}  AND RESIDENCE LIKE #{residence}
+				AND JOB LIKE #{job} AND OPENDAY LIKE #{openday} AND pv="사후"
+	</select> 
+		
+		
+	<select id="getSer_ProCounselList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT OPENDAY,NAME,AGE,RESIDENCE,JOB,PV,PAST_STRESS_EXPERIENCE,COUNSEL_CONTENTS,SEX,
+		ROUND((ps.SCORE1+ps.SCORE2)/2,2)as score1,ROUND((ps.SCORE3+ps.SCORE4+ps.SCORE5)/3,2)as score2,ROUND((ps.SCORE6+ps.SCORE7)/2,2)as score3,
+		ROUND((ps.SCORE8+ps.SCORE9+ps.SCORE10)/3,2)as score4, ROUND((ps.SCORE11+ps.SCORE12+ps.SCORE13)/3,2)as score5, ROUND((ps.SCORE14+ps.SCORE15+ps.SCORE16+ps.SCORE17)/4,2)as score6,
+		ROUND((ps.SCORE18+ps.SCORE19+ps.SCORE20+ps.SCORE21+ps.SCORE22+ps.SCORE23)/6,2)as score7, ROUND((ps.SCORE24+ps.SCORE25+ps.SCORE26)/3,2)as score8, ROUND((ps.SCORE27+ps.SCORE28+ps.SCORE29)/3,2)as score9,
+		ROUND((ps.SCORE30+ps.SCORE31+ps.SCORE32+ps.SCORE33+ps.SCORE34+ps.SCORE35)/6,2)as score10, ROUND((ps.SCORE36+ps.SCORE37+ps.SCORE38)/3,2)as score11,ROUND((ps.SCORE39+ps.SCORE40+ps.SCORE41+ps.SCORE42)/4,2)as score12,
+		ROUND((ps.SCORE43+ps.SCORE44)/2,2)as score13,ROUND((ps.SCORE45+ps.SCORE46+ps.SCORE47)/3,2)as score14,ROUND((ps.SCORE48+ps.SCORE49+ps.SCORE50)/3,2)as score15 ,ROUND((ps.SCORE51+ps.SCORE52+ps.SCORE53+ps.SCORE54)/4,2)as score16
+		,ROUND((ps.SCORE55+ps.SCORE56+ps.SCORE57)/3,2)as score17,ROUND((ps.SCORE58+ps.SCORE59+ps.SCORE60)/3,2)as score18 ,ROUND((ps.SCORE61+ps.SCORE62)/2,2)as score19
+		FROM COUNSEL_SERVICE ps
+		WHERE AGENCY LIKE #{agency} AND SEX LIKE #{sex} AND AGE LIKE #{age}  AND RESIDENCE LIKE #{residence}
+				AND JOB LIKE #{job} AND OPENDAY LIKE #{openday} AND PV="사전" 
+		ORDER BY NAME
+	</select>
+	 <select id="getSer_MidCounselList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT OPENDAY,NAME,AGE,RESIDENCE,JOB,PV,PAST_STRESS_EXPERIENCE,COUNSEL_CONTENTS,SEX,
+		ROUND((ps.SCORE1+ps.SCORE2)/2,2)as score1,ROUND((ps.SCORE3+ps.SCORE4+ps.SCORE5)/3,2)as score2,ROUND((ps.SCORE6+ps.SCORE7)/2,2)as score3,
+		ROUND((ps.SCORE8+ps.SCORE9+ps.SCORE10)/3,2)as score4, ROUND((ps.SCORE11+ps.SCORE12+ps.SCORE13)/3,2)as score5, ROUND((ps.SCORE14+ps.SCORE15+ps.SCORE16+ps.SCORE17)/4,2)as score6,
+		ROUND((ps.SCORE18+ps.SCORE19+ps.SCORE20+ps.SCORE21+ps.SCORE22+ps.SCORE23)/6,2)as score7, ROUND((ps.SCORE24+ps.SCORE25+ps.SCORE26)/3,2)as score8, ROUND((ps.SCORE27+ps.SCORE28+ps.SCORE29)/3,2)as score9,
+		ROUND((ps.SCORE30+ps.SCORE31+ps.SCORE32+ps.SCORE33+ps.SCORE34+ps.SCORE35)/6,2)as score10, ROUND((ps.SCORE36+ps.SCORE37+ps.SCORE38)/3,2)as score11,ROUND((ps.SCORE39+ps.SCORE40+ps.SCORE41+ps.SCORE42)/4,2)as score12,
+		ROUND((ps.SCORE43+ps.SCORE44)/2,2)as score13,ROUND((ps.SCORE45+ps.SCORE46+ps.SCORE47)/3,2)as score14,ROUND((ps.SCORE48+ps.SCORE49+ps.SCORE50)/3,2)as score15 ,ROUND((ps.SCORE51+ps.SCORE52+ps.SCORE53+ps.SCORE54)/4,2)as score16
+		,ROUND((ps.SCORE55+ps.SCORE56+ps.SCORE57)/3,2)as score17,ROUND((ps.SCORE58+ps.SCORE59+ps.SCORE60)/3,2)as score18 ,ROUND((ps.SCORE61+ps.SCORE62)/2,2)as score19
+		FROM COUNSEL_SERVICE ps
+		WHERE AGENCY LIKE #{agency} AND SEX LIKE #{sex} AND AGE LIKE #{age}  AND RESIDENCE LIKE #{residence}
+				AND JOB LIKE #{job} AND OPENDAY LIKE #{openday} AND PV="중간" 
+		ORDER BY NAME
+	</select>
+	 <select id="getSer_AftCounselList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT OPENDAY,NAME,AGE,RESIDENCE,JOB,PV,PAST_STRESS_EXPERIENCE,COUNSEL_CONTENTS,SEX,
+		ROUND((ps.SCORE1+ps.SCORE2)/2,2)as score1,ROUND((ps.SCORE3+ps.SCORE4+ps.SCORE5)/3,2)as score2,ROUND((ps.SCORE6+ps.SCORE7)/2,2)as score3,
+		ROUND((ps.SCORE8+ps.SCORE9+ps.SCORE10)/3,2)as score4, ROUND((ps.SCORE11+ps.SCORE12+ps.SCORE13)/3,2)as score5, ROUND((ps.SCORE14+ps.SCORE15+ps.SCORE16+ps.SCORE17)/4,2)as score6,
+		ROUND((ps.SCORE18+ps.SCORE19+ps.SCORE20+ps.SCORE21+ps.SCORE22+ps.SCORE23)/6,2)as score7, ROUND((ps.SCORE24+ps.SCORE25+ps.SCORE26)/3,2)as score8, ROUND((ps.SCORE27+ps.SCORE28+ps.SCORE29)/3,2)as score9,
+		ROUND((ps.SCORE30+ps.SCORE31+ps.SCORE32+ps.SCORE33+ps.SCORE34+ps.SCORE35)/6,2)as score10, ROUND((ps.SCORE36+ps.SCORE37+ps.SCORE38)/3,2)as score11,ROUND((ps.SCORE39+ps.SCORE40+ps.SCORE41+ps.SCORE42)/4,2)as score12,
+		ROUND((ps.SCORE43+ps.SCORE44)/2,2)as score13,ROUND((ps.SCORE45+ps.SCORE46+ps.SCORE47)/3,2)as score14,ROUND((ps.SCORE48+ps.SCORE49+ps.SCORE50)/3,2)as score15 ,ROUND((ps.SCORE51+ps.SCORE52+ps.SCORE53+ps.SCORE54)/4,2)as score16
+		,ROUND((ps.SCORE55+ps.SCORE56+ps.SCORE57)/3,2)as score17,ROUND((ps.SCORE58+ps.SCORE59+ps.SCORE60)/3,2)as score18 ,ROUND((ps.SCORE61+ps.SCORE62)/2,2)as score19
+		FROM COUNSEL_SERVICE ps
+		WHERE AGENCY LIKE #{agency} AND SEX LIKE #{sex} AND AGE LIKE #{age}  AND RESIDENCE LIKE #{residence}
+				AND JOB LIKE #{job} AND OPENDAY LIKE #{openday} AND PV="사후" 
+		ORDER BY NAME
+	</select>
+	
+	 <select id="getSer_CounselSessionList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		NAME,AGE,SESSION
+		FROM COUNSEL_SERVICE 
+		WHERE AGENCY LIKE #{agency} AND SEX LIKE #{sex} AND AGE LIKE #{age}  AND RESIDENCE LIKE #{residence}
+				AND JOB LIKE #{job} AND OPENDAY LIKE #{openday}
+		ORDER BY NAME
+	</select>
+	
+	<!--  <select id="getPre_Avg_CounselList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT IFNULL(ROUND(AVG(nullif(score1,0)),2),0) as score1,IFNULL(ROUND(AVG(nullif(score2,0)),2),0) as score2,IFNULL(ROUND(AVG(nullif(score3,0)),2),0) as score3,IFNULL(ROUND(AVG(nullif(score4,0)),2),0) as score4,
+			   IFNULL(ROUND(AVG(nullif(score5,0)),2),0) as score5,IFNULL(ROUND(AVG(nullif(score6,0)),2),0) as score6,IFNULL(ROUND(AVG(nullif(score7,0)),2),0) as score7,IFNULL(ROUND(AVG(nullif(score8,0)),2),0) as score8,
+			   IFNULL(ROUND(AVG(nullif(score9,0)),2),0) as score9,IFNULL(ROUND(AVG(nullif(score10,0)),2),0) as score10,IFNULL(ROUND(AVG(nullif(score11,0)),2),0) as score11,IFNULL(ROUND(AVG(nullif(score12,0)),2),0) as score12,
+			   IFNULL(ROUND(AVG(nullif(score13,0)),2),0) as score13,IFNULL(ROUND(AVG(nullif(score14,0)),2),0) as score14,IFNULL(ROUND(AVG(nullif(score15,0)),2),0) as score15,IFNULL(ROUND(AVG(nullif(score16,0)),2),0) as score16,
+			   IFNULL(ROUND(AVG(nullif(score17,0)),2),0) as score17,IFNULL(ROUND(AVG(nullif(score18,0)),2),0) as score18,IFNULL(ROUND(AVG(nullif(score19,0)),2),0) as score19,IFNULL(ROUND(AVG(nullif(score20,0)),2),0) as score20,
+			   IFNULL(ROUND(AVG(nullif(score21,0)),2),0) as score21,IFNULL(ROUND(AVG(nullif(score22,0)),2),0) as score22,IFNULL(ROUND(AVG(nullif(score23,0)),2),0) as score23,IFNULL(ROUND(AVG(nullif(score24,0)),2),0) as score24,
+			   IFNULL(ROUND(AVG(nullif(score25,0)),2),0) as score25,IFNULL(ROUND(AVG(nullif(score26,0)),2),0) as score26,IFNULL(ROUND(AVG(nullif(score27,0)),2),0) as score27,IFNULL(ROUND(AVG(nullif(score28,0)),2),0) as score28,
+			   IFNULL(ROUND(AVG(nullif(score29,0)),2),0) as score29,IFNULL(ROUND(AVG(nullif(score30,0)),2),0) as score30,IFNULL(ROUND(AVG(nullif(score31,0)),2),0) as score31,IFNULL(ROUND(AVG(nullif(score32,0)),2),0) as score32,
+			   IFNULL(ROUND(AVG(nullif(score33,0)),2),0) as score33,IFNULL(ROUND(AVG(nullif(score34,0)),2),0) as score34,IFNULL(ROUND(AVG(nullif(score35,0)),2),0) as score35,IFNULL(ROUND(AVG(nullif(score36,0)),2),0) as score36,
+			   IFNULL(ROUND(AVG(nullif(score37,0)),2),0) as score37,IFNULL(ROUND(AVG(nullif(score38,0)),2),0) as score38,IFNULL(ROUND(AVG(nullif(score39,0)),2),0) as score39,IFNULL(ROUND(AVG(nullif(score40,0)),2),0) as score40,
+			   IFNULL(ROUND(AVG(nullif(score41,0)),2),0) as score41,IFNULL(ROUND(AVG(nullif(score42,0)),2),0) as score42,IFNULL(ROUND(AVG(nullif(score43,0)),2),0) as score43,IFNULL(ROUND(AVG(nullif(score44,0)),2),0) as score44,
+			   IFNULL(ROUND(AVG(nullif(score45,0)),2),0) as score45,IFNULL(ROUND(AVG(nullif(score46,0)),2),0) as score46,IFNULL(ROUND(AVG(nullif(score47,0)),2),0) as score47,IFNULL(ROUND(AVG(nullif(score48,0)),2),0) as score48,
+			   IFNULL(ROUND(AVG(nullif(score49,0)),2),0) as score49,IFNULL(ROUND(AVG(nullif(score50,0)),2),0) as score50,IFNULL(ROUND(AVG(nullif(score51,0)),2),0) as score51,IFNULL(ROUND(AVG(nullif(score52,0)),2),0) as score52,
+			   IFNULL(ROUND(AVG(nullif(score53,0)),2),0) as score53,IFNULL(ROUND(AVG(nullif(score54,0)),2),0) as score54,IFNULL(ROUND(AVG(nullif(score55,0)),2),0) as score55,IFNULL(ROUND(AVG(nullif(score56,0)),2),0) as score56,
+			   IFNULL(ROUND(AVG(nullif(score57,0)),2),0) as score57,IFNULL(ROUND(AVG(nullif(score58,0)),2),0) as score58,IFNULL(ROUND(AVG(nullif(score59,0)),2),0) as score59,IFNULL(ROUND(AVG(nullif(score60,0)),2),0) as score60,
+			   IFNULL(ROUND(AVG(nullif(score61,0)),2),0) as score61,IFNULL(ROUND(AVG(nullif(score62,0)),2),0) as score62
+		FROM COUNSEL_SERVICE 
+		WHERE AGENCY LIKE #{agency} AND SEX LIKE #{sex} AND AGE LIKE #{age}  AND RESIDENCE LIKE #{residence}
+				AND JOB LIKE #{job} AND OPENDAY LIKE #{openday} AND pv="사전"
+		ORDER BY NAME
+	</select> -->
+	<!--  <select id="getAft_Avg_CounselList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT IFNULL(ROUND(AVG(nullif(score1,0)),2),0) as score1,IFNULL(ROUND(AVG(nullif(score2,0)),2),0) as score2,IFNULL(ROUND(AVG(nullif(score3,0)),2),0) as score3,IFNULL(ROUND(AVG(nullif(score4,0)),2),0) as score4,
+			   IFNULL(ROUND(AVG(nullif(score5,0)),2),0) as score5,IFNULL(ROUND(AVG(nullif(score6,0)),2),0) as score6,IFNULL(ROUND(AVG(nullif(score7,0)),2),0) as score7,IFNULL(ROUND(AVG(nullif(score8,0)),2),0) as score8,
+			   IFNULL(ROUND(AVG(nullif(score9,0)),2),0) as score9,IFNULL(ROUND(AVG(nullif(score10,0)),2),0) as score10,IFNULL(ROUND(AVG(nullif(score11,0)),2),0) as score11,IFNULL(ROUND(AVG(nullif(score12,0)),2),0) as score12,
+			   IFNULL(ROUND(AVG(nullif(score13,0)),2),0) as score13,IFNULL(ROUND(AVG(nullif(score14,0)),2),0) as score14,IFNULL(ROUND(AVG(nullif(score15,0)),2),0) as score15,IFNULL(ROUND(AVG(nullif(score16,0)),2),0) as score16,
+			   IFNULL(ROUND(AVG(nullif(score17,0)),2),0) as score17,IFNULL(ROUND(AVG(nullif(score18,0)),2),0) as score18,IFNULL(ROUND(AVG(nullif(score19,0)),2),0) as score19,IFNULL(ROUND(AVG(nullif(score20,0)),2),0) as score20,
+			   IFNULL(ROUND(AVG(nullif(score21,0)),2),0) as score21,IFNULL(ROUND(AVG(nullif(score22,0)),2),0) as score22,IFNULL(ROUND(AVG(nullif(score23,0)),2),0) as score23,IFNULL(ROUND(AVG(nullif(score24,0)),2),0) as score24,
+			   IFNULL(ROUND(AVG(nullif(score25,0)),2),0) as score25,IFNULL(ROUND(AVG(nullif(score26,0)),2),0) as score26,IFNULL(ROUND(AVG(nullif(score27,0)),2),0) as score27,IFNULL(ROUND(AVG(nullif(score28,0)),2),0) as score28,
+			   IFNULL(ROUND(AVG(nullif(score29,0)),2),0) as score29,IFNULL(ROUND(AVG(nullif(score30,0)),2),0) as score30,IFNULL(ROUND(AVG(nullif(score31,0)),2),0) as score31,IFNULL(ROUND(AVG(nullif(score32,0)),2),0) as score32,
+			   IFNULL(ROUND(AVG(nullif(score33,0)),2),0) as score33,IFNULL(ROUND(AVG(nullif(score34,0)),2),0) as score34,IFNULL(ROUND(AVG(nullif(score35,0)),2),0) as score35,IFNULL(ROUND(AVG(nullif(score36,0)),2),0) as score36,
+			   IFNULL(ROUND(AVG(nullif(score37,0)),2),0) as score37,IFNULL(ROUND(AVG(nullif(score38,0)),2),0) as score38,IFNULL(ROUND(AVG(nullif(score39,0)),2),0) as score39,IFNULL(ROUND(AVG(nullif(score40,0)),2),0) as score40,
+			   IFNULL(ROUND(AVG(nullif(score41,0)),2),0) as score41,IFNULL(ROUND(AVG(nullif(score42,0)),2),0) as score42,IFNULL(ROUND(AVG(nullif(score43,0)),2),0) as score43,IFNULL(ROUND(AVG(nullif(score44,0)),2),0) as score44,
+			   IFNULL(ROUND(AVG(nullif(score45,0)),2),0) as score45,IFNULL(ROUND(AVG(nullif(score46,0)),2),0) as score46,IFNULL(ROUND(AVG(nullif(score47,0)),2),0) as score47,IFNULL(ROUND(AVG(nullif(score48,0)),2),0) as score48,
+			   IFNULL(ROUND(AVG(nullif(score49,0)),2),0) as score49,IFNULL(ROUND(AVG(nullif(score50,0)),2),0) as score50,IFNULL(ROUND(AVG(nullif(score51,0)),2),0) as score51,IFNULL(ROUND(AVG(nullif(score52,0)),2),0) as score52,
+			   IFNULL(ROUND(AVG(nullif(score53,0)),2),0) as score53,IFNULL(ROUND(AVG(nullif(score54,0)),2),0) as score54,IFNULL(ROUND(AVG(nullif(score55,0)),2),0) as score55,IFNULL(ROUND(AVG(nullif(score56,0)),2),0) as score56,
+			   IFNULL(ROUND(AVG(nullif(score57,0)),2),0) as score57,IFNULL(ROUND(AVG(nullif(score58,0)),2),0) as score58,IFNULL(ROUND(AVG(nullif(score59,0)),2),0) as score59,IFNULL(ROUND(AVG(nullif(score60,0)),2),0) as score60,
+			   IFNULL(ROUND(AVG(nullif(score61,0)),2),0) as score61,IFNULL(ROUND(AVG(nullif(score62,0)),2),0) as score62
+		FROM COUNSEL_SERVICE 
+		WHERE AGENCY LIKE #{agency} AND SEX LIKE #{sex} AND AGE LIKE #{age}  AND RESIDENCE LIKE #{residence}
+				AND JOB LIKE #{job} AND OPENDAY LIKE #{openday} AND pv="사후"
+		ORDER BY NAME
+	</select> -->
+		 
+		 
+		 
+	
+</mapper>

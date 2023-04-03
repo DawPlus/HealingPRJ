@@ -1,0 +1,1 @@
+mysql -u root -p DB명 < 백업파일경로/파일명.sql

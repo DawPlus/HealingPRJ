@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="poly.persistance.mapper.IUpdateMapper">
+	<!--업데이트할 목록 리스트 가져오기  -->
+	<select id="getList" resultType="UpdateListDTO" parameterType="UpdateListDTO">
+		<choose>
+			<when test="table_name.equals('basic_info')">
+				SELECT AGENCY, OPENDAY FROM ${table_name}
+				WHERE PROGRESS_STATE = "E" GROUP BY AGENCY, OPENDAY
+			</when>
+			<when test="table_name.equals('service_env_satisfaction')">
+				SELECT AGENCY, OPENDAY, EVAL_DATE FROM ${table_name}
+				GROUP BY AGENCY, EVAL_DATE
+			</when>
+			<when test="table_name.equals('program_satisfaction')">
+				SELECT AGENCY, OPENDAY, EVAL_DATE, PROGRAM_NAME FROM ${table_name}
+				GROUP BY AGENCY, EVAL_DATE, PROGRAM_NAME
+			</when>
+			<when test="table_name.equals('hrv_service') or table_name.equals('vibra_service')">
+				SELECT AGENCY, PV FROM ${table_name}
+				GROUP BY AGENCY, PV, DATE
+			</when>
+			<when test="table_name.equals('counsel_service')">
+				SELECT  AGENCY, OPENDAY, EVAL_DATE, PV, SESSION FROM ${table_name}
+				GROUP BY AGENCY, PV, EVAL_DATE
+			</when>
+			<otherwise>
+				SELECT AGENCY, OPENDAY, EVAL_DATE, PV FROM ${table_name}
+				GROUP BY AGENCY, PV, EVAL_DATE
+			</otherwise>
+		</choose>
+	</select>
+	<delete id="deleteForm" parameterType="UpdateListDTO">
+		<choose>
+			<when test="table_name.equals('basic_info')">
+				DELETE FROM ${table_name}
+				WHERE PROGRESS_STATE = "E" AND AGENCY = #{agency} AND OPENDAY = #{openday}
+			</when>
+			<when test="table_name.equals('service_env_satisfaction')">
+				DELETE FROM ${table_name}
+				WHERE AGENCY = #{agency} AND EVAL_DATE = #{openday} 
+			</when>
+			<when test="table_name.equals('program_satisfaction')">
+				DELETE FROM ${table_name}
+				WHERE AGENCY = #{agency} AND EVAL_DATE = #{openday} AND PROGRAM_NAME = #{program_name}
+			</when>
+			<when test="table_name.equals('hrv_service') or table_name.equals('vibra_service')">
+				DELETE FROM ${table_name}
+				WHERE AGENCY = #{agency} AND PV = #{pv} 
+			</when>
+			<otherwise>
+				DELETE FROM ${table_name}
+				WHERE AGENCY = #{agency} AND EVAL_DATE = #{openday} AND PV = #{pv} 
+			</otherwise>
+		</choose>
+	</delete>
+	<!--  -->
+	<select id="serviceUpdateForm" parameterType="UpdateListDTO" resultType="ServiceInsertDTO">
+		SELECT OPENDAY, AGENCY, EVAL_DATE, PTCPROGRAM, SEX, AGE, RESIDENCE, JOB, CONCAT(SCORE1,',',SCORE2,',',SCORE3,',',SCORE4,',',SCORE5,',',SCORE6,',',SCORE7,',',SCORE8,',',SCORE9,',',SCORE10,',',FACILITY_OPINION,',',SCORE11,',',SCORE12,',',SCORE13,',',SCORE14,',',SCORE15,',',SCORE16,',',OPERATION_OPINION,',',SCORE17,',',SCORE18) as scoreString2List FROM service_env_satisfaction
+		WHERE AGENCY=#{agency} AND EVAL_DATE=#{openday}
+	</select>
+	<!--  -->
+	<select id="programUpdateForm" parameterType="UpdateListDTO" resultType="ProgramInsertDTO">
+		SELECT OPENDAY, AGENCY, EVAL_DATE, PTCPROGRAM, SEX, AGE, RESIDENCE, JOB, TYPE, BUNYA, PROGRAM_NAME, TEACHER, PLACE, CONCAT(SCORE1,',',SCORE2,',',SCORE3,',',SCORE4,',',SCORE5,',',SCORE6,',',SCORE7,',',SCORE8,',',SCORE9,',',ETC_OPINION) as scoreString2List FROM program_satisfaction
+		WHERE AGENCY=#{agency} AND EVAL_DATE=#{openday} AND PROGRAM_NAME=#{program_name}
+	</select>
+	<!--  -->
+	<select id="healingUpdateForm" parameterType="UpdateListDTO" resultType="HealingInsertDTO">
+		SELECT OPENDAY, AGENCY, NAME, SEX, AGE, RESIDENCE, JOB, PTCPROGRAM, PAST_STRESS_EXPERIENCE, EVAL_DATE, PV, CONCAT(SCORE1,',',SCORE2,',',SCORE3,',',SCORE4,',',SCORE5,',',SCORE6,',',SCORE7,',',SCORE8,',',SCORE9,',',SCORE10,',',SCORE11,',',SCORE12,',',SCORE13,',',SCORE14,',',SCORE15,',',SCORE16,',',SCORE17,',',SCORE18,',',SCORE19,',',SCORE20,',',SCORE21,',',SCORE22) as scoreString2List FROM healing_service
+		WHERE AGENCY=#{agency} AND EVAL_DATE=#{openday} AND PV=#{pv}
+	</select>
+	<!--  -->
+	<select id="basicInfoUpdateForm" parameterType="UpdateListDTO" resultType="BasicInfoDTO">
+		SELECT * FROM basic_info
+		WHERE AGENCY=#{agency} AND OPENDAY=#{openday}
+	</select>
+	<!--  -->
+	<select id="preventUpdateForm" parameterType="UpdateListDTO" resultType="PreventInsertDTO">
+		SELECT OPENDAY, AGENCY, NAME, SEX, AGE, RESIDENCE, JOB, PTCPROGRAM, PAST_STRESS_EXPERIENCE, EVAL_DATE, PV, CONCAT(SCORE1,',',SCORE2,',',SCORE3,',',SCORE4,',',SCORE5,',',SCORE6,',',SCORE7,',',SCORE8,',',SCORE9,',',SCORE10,',',SCORE11,',',SCORE12,',',SCORE13,',',SCORE14,',',SCORE15,',',SCORE16,',',SCORE17,',',SCORE18,',',SCORE19,',',SCORE20) as scoreString2List FROM prevent_service
+		WHERE AGENCY=#{agency} AND EVAL_DATE=#{openday} AND PV=#{pv}
+	</select>
+	<!--  -->
+	<select id="counselUpdateForm" parameterType="UpdateListDTO" resultType="CounselInsertDTO">
+		SELECT OPENDAY, AGENCY, NAME, SEX, AGE, RESIDENCE, JOB, PAST_STRESS_EXPERIENCE, EVAL_DATE, PV, COUNSEL_CONTENTS, SESSION, CONCAT(SCORE1,',',SCORE2,',',SCORE3,',',SCORE4,',',SCORE5,',',SCORE6,',',SCORE7,',',SCORE8,',',SCORE9,',',SCORE10,',',SCORE11,',',SCORE12,',',SCORE13,',',SCORE14,',',SCORE15,',',SCORE16,',',SCORE17,',',SCORE18,',',SCORE19,',',SCORE20
+				,',',SCORE21,',',SCORE22,',',SCORE23,',',SCORE24,',',SCORE25,',',SCORE26,',',SCORE27,',',SCORE28,',',SCORE29,',',SCORE30,',',SCORE31,',',SCORE32,',',SCORE33,',',SCORE34,',',SCORE35,',',SCORE36,',',SCORE37
+				,',',SCORE38,',',SCORE39,',',SCORE40,',',SCORE41,',',SCORE42,',',SCORE43,',',SCORE44,',',SCORE45,',',SCORE46,',',SCORE47,',',SCORE48,',',SCORE49,',',SCORE50,',',SCORE51,',',SCORE52,',',SCORE53
+				,',',SCORE54,',',SCORE55,',',SCORE56,',',SCORE57,',',SCORE58,',',SCORE59,',',SCORE60,',',SCORE61,',',SCORE62) as scoreString2List FROM counsel_service
+		WHERE AGENCY=#{agency} AND EVAL_DATE=#{openday} AND PV=#{pv}
+	</select>
+	<!--  -->
+	<select id="hrvUpdateForm" parameterType="UpdateListDTO" resultType="HrvInsertDTO">
+		SELECT DATE, AGENCY, PV, NAME, AGE, SEX, EQUIPMENT, ID, JUMIN, CONCAT(NUM1,',',NUM2,',',NUM3,',',NUM4,',',NUM5,',',NUM6,',',NUM7,',',NUM8) as scoreString2List FROM hrv_service
+		WHERE AGENCY=#{agency} AND PV=#{pv}
+	</select>
+	<!--  -->
+	<select id="vibraUpdateForm" parameterType="UpdateListDTO" resultType="VibraInsertDTO">
+		SELECT DATE, AGENCY, PV, NAME, AGE, SEX, EQUIPMENT, ID, JUMIN, CONCAT(NUM1,',',NUM2,',',NUM3,',',NUM4,',',NUM5,',',NUM6,',',NUM7,',',NUM8,',',NUM9,',',NUM10) as scoreString2List FROM vibra_service
+		WHERE AGENCY=#{agency} AND PV=#{pv}
+	</select>
+	<!--중간저장 가져오기  -->
+	<select id="getBasicInfoUpdate" resultType="BasicInfoDTO" parameterType="BasicInfoDTO">
+		SELECT BASIC_INFO_SEQ, OPENDAY, AGENCY, OM, ENDDAY, DAYS_TO_STAY, RESIDENCE, PART_MAN_CNT, PART_WOMAN_CNT, LEAD_MAN_CNT, LEAD_WOMAN_CNT, SUPPORT, INCOME_TYPE, PART_TYPE, AGE_TYPE, BIZ_PURPOSE, SERVICE_TYPE,
+		ROOM_PART_PEOPLE, ROOM_PART_ROOM, ROOM_LEAD_PEOPLE, ROOM_LEAD_ROOM, ROOM_ETC_PEOPLE, ROOM_ETC_ROOM, MEAL_TYPE, MEAL_PART, MEAL_LEAD, MEAL_ETC,
+		PROGRAM_OPINION, SERVICE_OPINION, OVERALL_OPINION, REG_ID, PROGRAM_IN_OUT as program_in_out2  FROM foresthealing.basic_info
+		WHERE PROGRESS_STATE = "E" AND OPENDAY = #{openday} AND AGENCY = #{agency}
+	</select>
+	<!--업데이트할 목록 리스트 가져오기 기관명 검색해서  -->
+	<select id="getAgencyList" resultType="UpdateListDTO" parameterType="UpdateListDTO">
+		<choose>
+			<when test="table_name.equals('basic_info')">
+				SELECT AGENCY, OPENDAY FROM ${table_name}
+				WHERE AGENCY=#{agency} AND PROGRESS_STATE="E" GROUP BY OPENDAY
+			</when>
+			<when test="table_name.equals('service_env_satisfaction')">
+				SELECT AGENCY, OPENDAY, EVAL_DATE FROM ${table_name}
+				WHERE AGENCY=#{agency} GROUP BY EVAL_DATE
+			</when>
+			<when test="table_name.equals('program_satisfaction')">
+				SELECT AGENCY, OPENDAY, EVAL_DATE, PROGRAM_NAME FROM ${table_name}
+				WHERE AGENCY=#{agency} GROUP BY EVAL_DATE, PROGRAM_NAME
+			</when>
+			<when test="table_name.equals('hrv_service') or table_name.equals('vibra_service')">
+				SELECT AGENCY, EVAL_DATE, PV FROM ${table_name}
+				WHERE AGENCY=#{agency} GROUP BY  EVAL_DATE, PV
+			</when>
+			<otherwise>
+				SELECT AGENCY, OPENDAY, EVAL_DATE, PV FROM ${table_name}
+				WHERE AGENCY=#{agency} GROUP BY  EVAL_DATE, PV
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<!-- 프로그램 운영 결과 입력 -->
+	<insert id="updateBasic" parameterType="BasicInfoDTO">
+		UPDATE basic_info
+		SET
+			OPENDAY = #{openday},
+			AGENCY = #{agency},
+			OM = #{om},
+			ENDDAY = #{endday},
+			DAYS_TO_STAY = #{days_to_stay},
+			RESIDENCE = #{residence},
+			PART_MAN_CNT = #{part_man_cnt},
+			PART_WOMAN_CNT = #{part_woman_cnt},
+			LEAD_MAN_CNT = #{lead_man_cnt},
+			LEAD_WOMAN_CNT = #{lead_woman_cnt},
+			SUPPORT = #{support},
+			INCOME_TYPE = #{income_type},
+			PART_TYPE = #{part_type},
+			AGE_TYPE = #{age_type},
+			BIZ_PURPOSE = #{biz_purpose},
+			SERVICE_TYPE = #{service_type},
+			
+			PROGRAM_IN_OUT = CONCAT_WS(',', <foreach collection="program_in_out" item="program_in_out" separator=",">{ #{program_in_out.programName}, #{program_in_out.bunya}, #{program_in_out.teacher}, #{program_in_out.in_tutor}, #{program_in_out.out_tutor} }</foreach>),
+			
+			ROOM_PART_PEOPLE = #{room_part_people},
+			ROOM_PART_ROOM = #{room_part_room},
+			ROOM_LEAD_PEOPLE = #{room_lead_people},
+			ROOM_LEAD_ROOM = #{room_lead_room},
+			ROOM_ETC_PEOPLE = #{room_etc_people}, 
+			ROOM_ETC_ROOM = #{room_etc_room}, 
+			MEAL_TYPE = #{meal_type}, 
+			MEAL_PART = #{meal_part}, 
+			MEAL_LEAD = #{meal_lead}, 
+			MEAL_ETC = #{meal_etc},
+			PROGRAM_OPINION = #{program_opinion}, 
+			SERVICE_OPINION = #{service_opinion}, 
+			OVERALL_OPINION = #{overall_opinion}, 
+			PROGRESS_STATE = #{progress_state},
+			REG_ID = #{reg_id}
+		
+		WHERE basic_info_seq = #{basic_info_seq}
+		
+	</insert>
+	
+</mapper>
+
+

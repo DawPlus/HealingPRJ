@@ -1,0 +1,20 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<option>서울</option>
+<option>부산</option>
+<option>대구</option>
+<option>인천</option>
+<option>광주</option>
+<option>대전</option>
+<option>울산</option>
+<option>세종</option>
+<option>경기</option>
+<option>강원</option>
+<option>충북</option>
+<option>충남</option>
+<option>전북</option>
+<option>전남</option>
+<option>경북</option>
+<option>경남</option>
+<option>제주</option>
+<option>미기재</option>

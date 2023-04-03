@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <typeAliases>
+    	<!-- 사용할 DTO 등록  -->
+    	<typeAlias alias="BasicInfoDTO" type="poly.dto.BasicInfoDTO" />
+		<typeAlias alias="HealingInsertDTO" type="poly.dto.HealingInsertDTO" />
+		<typeAlias alias="IncomeDTO" type="poly.dto.IncomeDTO" />
+		<typeAlias alias="ExpenseDTO" type="poly.dto.ExpenseDTO" />
+		<typeAlias alias="PreventInsertDTO" type="poly.dto.PreventInsertDTO" />
+    	<typeAlias alias="ProgramInOutDTO" type="poly.dto.ProgramInOutDTO"/>
+		<typeAlias alias="ProgramInsertDTO" type="poly.dto.ProgramInsertDTO" />
+		<typeAlias alias="CounselInsertDTO" type="poly.dto.CounselInsertDTO" />
+    	<typeAlias alias="ServiceInsertDTO" type="poly.dto.ServiceInsertDTO" />
+		<typeAlias alias="StudentDTO" type="poly.dto.StudentDTO" />
+		<typeAlias alias="ProgramInOutDTO" type="poly.dto.ProgramInOutDTO" />
+		<typeAlias alias="InOutDTO" type="poly.dto.InOutDTO" />
+		<typeAlias alias="HrvInsertDTO" type="poly.dto.HrvInsertDTO" />
+		<typeAlias alias="VibraInsertDTO" type="poly.dto.VibraInsertDTO" />
+		<typeAlias alias="HistoryDTO" type="poly.dto.HistoryDTO" />
+		<typeAlias alias="UserDTO" type="poly.dto.UserDTO" />
+		<typeAlias alias="ResidenceDTO" type="poly.dto.ResidenceDTO" />
+		<typeAlias alias="SearchDTO" type="poly.dto.SearchDTO" />
+		<typeAlias alias="YearResultDTO" type="poly.dto.YearResultDTO" />
+		<typeAlias alias="ProgramOperationDTO" type="poly.dto.ProgramOperationDTO" />
+		<typeAlias alias="BasicInfoPageDTO" type="poly.dto.BasicInfoPageDTO" />
+		<typeAlias alias="UpdateListDTO" type="poly.dto.UpdateListDTO" />
+    </typeAliases>
+</configuration>

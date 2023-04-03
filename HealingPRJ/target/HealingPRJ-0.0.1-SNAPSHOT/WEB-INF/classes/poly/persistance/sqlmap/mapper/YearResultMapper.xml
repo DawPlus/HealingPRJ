@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="poly.persistance.mapper.IYearResultMapper">
+	
+	<select id="getPartList" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		COUNT(case when PART_TYPE ="장애인" then 1 end ) as part_handcap, COUNT(case when PART_TYPE ="저소득" then 1 end ) as part_lowmoney,
+		COUNT(case when PART_TYPE ="가족" then 1 end )  as part_family, COUNT(case when PART_TYPE ="교직원" then 1 end ) as part_teacher, 
+		COUNT(case when PART_TYPE ="중독" then 1 end )  as part_addict, COUNT(case when PART_TYPE ="기타" then 1 end ) as part_etc
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PROGRESS_STATE ="E"
+	</select>
+	
+	<select id="getBasicList" parameterType="BasicInfoDTO" resultType="BasicInfoDTO">
+		SELECT *
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PROGRESS_STATE ="E"
+	</select>
+		
+	<select id="getAgeList" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		COUNT(case when AGE_TYPE ="아동" then 1 end ) as part_kid, COUNT(case when AGE_TYPE ="청소년" then 1 end ) as part_boy ,
+		COUNT(case when AGE_TYPE ="성인" then 1 end ) as part_adult,
+		COUNT(case when AGE_TYPE ="노인" then 1 end ) as part_old
+		
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getIncomeList" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		COUNT(case when INCOME_TYPE ="기타" then 1 end ) as biz_etc, COUNT(case when INCOME_TYPE ="녹색자금" then 1 end ) as biz_green , 
+		COUNT(case when INCOME_TYPE ="산림복지바우처" then 1 end ) as biz_voucher
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PROGRESS_STATE ="E"
+	</select>	
+	
+	<select id="getGreen" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as biz_green
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND INCOME_TYPE ="녹색자금" AND PROGRESS_STATE ="E"
+	</select>	
+	
+	<select id="getVoucher" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as biz_voucher
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND INCOME_TYPE ="산림복지" AND PROGRESS_STATE ="E"
+	</select>	
+	
+	<select id="getEtc" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as biz_etc
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND INCOME_TYPE ="기타" AND PROGRESS_STATE ="E"
+	</select>	
+	
+	<select id="getBizList" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		COUNT(case when BIZ_PURPOSE ="수익사업" then 1 end ) as biz_benefit, 
+		COUNT(case when BIZ_PURPOSE ="사회공헌" then 1 end ) as biz_society,
+		COUNT(BIZ_PURPOSE) as sum
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PROGRESS_STATE ="E"
+	</select>
+	
+	<select id="getBenefitList" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as biz_benefit
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND BIZ_PURPOSE ="수익사업" AND PROGRESS_STATE ="E"
+	</select>
+	<select id="getSocietyList" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as biz_society
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND BIZ_PURPOSE ="사회공헌" AND PROGRESS_STATE ="E"
+	</select>
+	
+	
+	
+	<select id="getKidCount" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as part_kid
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND AGE_TYPE="아동" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getBoyCount" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as part_boy
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND AGE_TYPE="청소년" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getAdultCount" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as part_adult
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND AGE_TYPE="성인" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getOldCount" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as part_old
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND AGE_TYPE="노인" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getLowMoneyCount" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as part_lowmoney
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PART_TYPE="저소득" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getHandCapCount" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as part_handcap
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PART_TYPE="장애인" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getFamilyCount" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as part_family
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PART_TYPE="가족" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getTeacherCount" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as part_teacher
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PART_TYPE="교직원" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getEtcCount" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as part_etc
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PART_TYPE="기타" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getAddictCount" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as part_addict
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PART_TYPE="중독" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getSumCount" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as sum
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PROGRESS_STATE ="E"
+	</select>	
+	
+	<select id="getRoomList" parameterType="BasicInfoDTO" resultType="BasicInfoDTO">
+		SELECT 
+		SUM(ROOM_PART_PEOPLE) as room_part_people, SUM(ROOM_LEAD_PEOPLE) as room_lead_people, SUM(ROOM_ETC_PEOPLE) as room_etc_people,
+		SUM(ROOM_PART_ROOM) as room_part_room, SUM(ROOM_LEAD_ROOM) as room_lead_room, SUM(ROOM_ETC_PEOPLE) as room_etc_room,
+		SUM(MEAL_PART) as meal_part, SUM(MEAL_LEAD) as meal_lead, SUM(MEAL_ETC) as meal_etc
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PROGRESS_STATE ="E"
+	</select>	
+	
+	<select id="getoperationList" parameterType="ProgramOperationDTO" resultType="ProgramOperationDTO">
+		SELECT 
+		PROGRAM_IN_OUT as PROGRAM_IN_OUT2
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PROGRESS_STATE ="E"
+	</select>	
+	
+	<select id ="getSerList" parameterType="ServiceInsertDTO" resultType="ServiceInsertDTO">
+		SELECT 
+		ifnull(ROUND(AVG(nullif(score1,0)),2),0) as score1,    ifnull(ROUND(AVG(nullif(score2,0)),2),0) as score2,   ifnull(ROUND(AVG(nullif(score3,0)),2),0) as score3,   ifnull(ROUND(AVG(nullif(score4,0)),2),0) as score4,   ifnull(ROUND(AVG(nullif(score5,0)),2),0) as score5,
+		ifnull(ROUND(AVG(nullif(score6,0)),2),0) as score6,    ifnull(ROUND(AVG(nullif(score7,0)),2),0) as score7,   ifnull(ROUND(AVG(nullif(score8,0)),2),0) as score8,   ifnull(ROUND(AVG(nullif(score9,0)),2),0) as score9,   ifnull(ROUND(AVG(nullif(score10,0)),2),0) as score10,
+		ifnull(ROUND(AVG(nullif(score11,0)),2),0) as score11,  ifnull(ROUND(AVG(nullif(score12,0)),2),0) as score12, ifnull(ROUND(AVG(nullif(score13,0)),2),0) as score13, ifnull(ROUND(AVG(nullif(score14,0)),2),0) as score14, ifnull(ROUND(AVG(nullif(score15,0)),2),0) as score15, 
+		ifnull(ROUND(AVG(nullif(score16,0)),2),0) as score16
+		FROM SERVICE_ENV_SATISFACTION
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday}
+	</select>
+	
+	<select id="getResidenceList" parameterType="ResidenceDTO" resultType="ResidenceDTO">
+		SELECT 
+		COUNT(case when RESIDENCE ="서울" then 1 end ) as seoul, COUNT(case when RESIDENCE ="부산" then 1 end ) as busan,
+		COUNT(case when RESIDENCE ="대구" then 1 end ) as daegu,
+		COUNT(case when RESIDENCE ="인천" then 1 end ) as incheon, COUNT(case when RESIDENCE ="대전" then 1 end ) as dajeon,
+		COUNT(case when RESIDENCE ="광주" then 1 end ) as gwangju,
+		COUNT(case when RESIDENCE ="울산" then 1 end ) as ulsan,   COUNT(case when RESIDENCE ="경기" then 1 end ) as keongi,
+		COUNT(case when RESIDENCE ="강원" then 1 end ) as  gangwon,
+		COUNT(case when RESIDENCE ="폐광지역" then 1 end ) as mine,      COUNT(case when RESIDENCE ="충북" then 1 end ) as chungbuk,
+		COUNT(case when RESIDENCE ="충남" then 1 end ) as chungnam,    COUNT(case when RESIDENCE ="세종" then 1 end ) as sejong,
+		COUNT(case when RESIDENCE ="경북" then 1 end ) as geongbuk,COUNT(case when RESIDENCE ="경남" then 1 end ) as geongnam,
+		COUNT(case when RESIDENCE ="전북" then 1 end ) as jeonbuk,
+		COUNT(case when RESIDENCE ="전남" then 1 end ) as jeonnam, COUNT(case when RESIDENCE ="제주" then 1 end ) as jeju,
+		COUNT(RESIDENCE) as sum
+		FROM BASIC_INFO	
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PROGRESS_STATE ="E"
+	</select>
+	
+	<select id="getSeoul" parameterType="ResidenceDTO" resultType="ResidenceDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as seoul
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND RESIDENCE ="서울" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getBusan" parameterType="ResidenceDTO" resultType="ResidenceDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as busan
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND RESIDENCE ="부산" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getDaegu" parameterType="ResidenceDTO" resultType="ResidenceDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as daegu
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND RESIDENCE ="대구" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getIncheon" parameterType="ResidenceDTO" resultType="ResidenceDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as incheon
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND RESIDENCE ="인천" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getDajeon" parameterType="ResidenceDTO" resultType="ResidenceDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as dajeon
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND RESIDENCE ="대전" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getGwamgju" parameterType="ResidenceDTO" resultType="ResidenceDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as gwangju
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND RESIDENCE ="광주" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getUlsan" parameterType="ResidenceDTO" resultType="ResidenceDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as ulsan
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND RESIDENCE ="울산" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getKeongi" parameterType="ResidenceDTO" resultType="ResidenceDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as keongi
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND RESIDENCE ="경기" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getGangwon" parameterType="ResidenceDTO" resultType="ResidenceDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as gangwon
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND RESIDENCE ="강원" AND PROGRESS_STATE ="E"
+	</select>	 
+	<select id="getMine" parameterType="ResidenceDTO" resultType="ResidenceDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as mine
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND RESIDENCE ="폐광지역" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getChungnam" parameterType="ResidenceDTO" resultType="ResidenceDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as chungnam
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND RESIDENCE ="충남" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getsejong" parameterType="ResidenceDTO" resultType="ResidenceDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as sejong
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND RESIDENCE ="세종" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getChungbuk" parameterType="ResidenceDTO" resultType="ResidenceDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as chungbuk
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND RESIDENCE ="충북" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getGeongbuk" parameterType="ResidenceDTO" resultType="ResidenceDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as geongbuk
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND RESIDENCE ="경북" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getGeongnam" parameterType="ResidenceDTO" resultType="ResidenceDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as geongnam
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND RESIDENCE ="경남" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getJeonbuk" parameterType="ResidenceDTO" resultType="ResidenceDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as jeonbuk
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND RESIDENCE ="전북" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getJeonnam" parameterType="ResidenceDTO" resultType="ResidenceDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as jeonnam
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND RESIDENCE ="전남" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getjeju" parameterType="ResidenceDTO" resultType="ResidenceDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as jeju
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND RESIDENCE ="제주" AND PROGRESS_STATE ="E"
+	</select>	
+	<select id="getSumRes" parameterType="ResidenceDTO" resultType="ResidenceDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT+PART_WOMAN_CNT+LEAD_MAN_CNT+LEAD_WOMAN_CNT),0) as sum
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PROGRESS_STATE ="E"
+	</select>	
+	
+	<select id="getSupBenefit" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		SUPPORT as support1
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND BIZ_PURPOSE ="수익사업" AND PROGRESS_STATE ="E"
+	</select> 
+	
+	<select id="getSupSociety" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		SUPPORT as support1
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND BIZ_PURPOSE ="사회공헌" AND PROGRESS_STATE ="E"
+	</select>
+	
+	<select id="getSerBenefit" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		COUNT(case when SERVICE_TYPE ="산림교육" then 1 end ) as forest_edu, 
+		COUNT(case when SERVICE_TYPE ="산림치유" then 1 end ) as forest_healing,
+		COUNT(case when SERVICE_TYPE ="행위중독치유" then 1 end ) as addict_healing,
+		COUNT(case when SERVICE_TYPE ="행위중독예방" then 1 end ) as addict_prevent,
+		COUNT(case when SERVICE_TYPE ="힐링" then 1 end ) as healing,
+		COUNT(case when SERVICE_TYPE ="기타" then 1 end ) as ser_etc
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND BIZ_PURPOSE ="수익사업" AND PROGRESS_STATE ="E"
+	</select>
+	<select id="getSerSociety" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		COUNT(case when SERVICE_TYPE ="산림교육" then 1 end ) as forest_edu, 
+		COUNT(case when SERVICE_TYPE ="산림치유" then 1 end ) as forest_healing,
+		COUNT(case when SERVICE_TYPE ="행위중독치유" then 1 end ) as addict_healing,
+		COUNT(case when SERVICE_TYPE ="행위중독예방" then 1 end ) as addict_prevent,
+		COUNT(case when SERVICE_TYPE ="힐링" then 1 end ) as healing,
+		COUNT(case when SERVICE_TYPE ="기타" then 1 end ) as ser_etc
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND BIZ_PURPOSE ="사회공헌" AND PROGRESS_STATE ="E"
+	</select>
+	
+	<select id="getPartBenefit" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT),0)as part_man, IFNULL(SUM(PART_WOMAN_CNT),0) as part_woman,
+		IFNULL(SUM(LEAD_MAN_CNT),0)as lead_man, IFNULL(SUM(LEAD_WOMAN_CNT),0) as lead_woman
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND BIZ_PURPOSE ="수익사업" AND PROGRESS_STATE ="E"
+	</select>
+	
+	<select id="getPartSociety" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT 
+		IFNULL(SUM(PART_MAN_CNT),0)as part_man, IFNULL(SUM(PART_WOMAN_CNT),0) as part_woman,
+		IFNULL(SUM(LEAD_MAN_CNT),0)as lead_man, IFNULL(SUM(LEAD_WOMAN_CNT),0) as lead_woman
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND BIZ_PURPOSE ="사회공헌" AND PROGRESS_STATE ="E"
+	</select>
+	
+	<select id="getBene_List" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT
+		IFNULL(PART_MAN_CNT,0) as part_man,IFNULL(PART_WOMAN_CNT,0) as part_woman,
+		IFNULL(LEAD_MAN_CNT,0) as lead_man,IFNULL(LEAD_WOMAN_CNT,0) as lead_woman, IFNULL(DAYS_TO_STAY,0) as days_to_stay
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND BIZ_PURPOSE ="수익사업" AND PROGRESS_STATE ="E"
+	</select>
+	<select id="getSoc_List" parameterType="YearResultDTO" resultType="YearResultDTO">
+		SELECT
+		IFNULL(PART_MAN_CNT,0) as part_man,IFNULL(PART_WOMAN_CNT,0) as part_woman,
+		IFNULL(LEAD_MAN_CNT,0) as lead_man,IFNULL(LEAD_WOMAN_CNT,0) as lead_woman, IFNULL(DAYS_TO_STAY,0) as days_to_stay
+		FROM BASIC_INFO
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND BIZ_PURPOSE ="사회공헌" AND PROGRESS_STATE ="E"
+	
+	</select>
+	<!--=============================================================프로그램 만족도============================================================  -->
+	
+	<select id="getBunyaList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT
+			bunya,
+            ROUND(sum(SCORE1+SCORE2+SCORE3)/(count(Case WHEN SCORE1 != 0 then 1 END)+count(CASE WHEN SCORE2 !=0 then 1 END)+count(Case WHen SCORE3 !=0 then 1 END)),2)as program,
+            ROUND(sum(SCORE4+SCORE5+SCORE6)/(count(Case WHEN SCORE4 != 0 then 1 END)+count(CASE WHEN SCORE5 !=0 then 1 END)+count(Case WHen SCORE6 !=0 then 1 END)),2)as content,
+            ROUND(sum(SCORE7+SCORE8+SCORE9)/(count(Case WHEN SCORE8 != 0 then 1 END)+count(CASE WHEN SCORE7 !=0 then 1 END)+count(CASE WHEN SCORE9 !=0 then 1 END)),2)as effect
+			FROM PROGRAM_SATISFACTION
+			WHERE  OPENDAY BETWEEN #{openday} AND #{endday} 
+			group by bunya
+	</select>
+	
+	
+	
+	<!--==============================================================예방======================================================================  -->
+	 <select id ="getPre_PreList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		IFNULL(SUM(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
+			SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18),0) as sum1,
+			
+		IFNULL(ROUND(AVG(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
+		SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18)/18,2),0) as avg1
+		FROM PREVENT_SERVICE
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PV ="사전"
+	</select>  
+	
+	 <select id ="getAf_PreList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		IFNULL(SUM(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
+			SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18),0) as sum2,
+			
+		IFNULL(ROUND(AVG(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
+		SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18)/18,2),0) as avg2
+		FROM PREVENT_SERVICE
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PV ="사후"
+	</select>  
+	
+<!-- ==========================================================설문============================================================================  -->	
+	
+	 <select id ="getPre_CounselList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		IFNULL(SUM(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
+			SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE18
+			+ SCORE19+ SCORE20+ SCORE21+ SCORE22+ SCORE23+ SCORE24+ SCORE25+ SCORE26+ SCORE27
+			+ SCORE28+ SCORE29+ SCORE30+ SCORE31+ SCORE32+ SCORE33+ SCORE34+ SCORE35+ SCORE36+ SCORE37
+			+ SCORE38+ SCORE39+ SCORE40+ SCORE41+ SCORE42+ SCORE43+ SCORE44+ SCORE45+ SCORE46+ SCORE47
+			+ SCORE48+ SCORE49+ SCORE50+ SCORE51+ SCORE52+ SCORE53+ SCORE54+ SCORE55+ SCORE56+ SCORE57
+			+ SCORE58+ SCORE59+ SCORE60+ SCORE61+ SCORE62),0) as sum1,
+		IFNULL(ROUND(AVG(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
+			SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE18
+			+ SCORE19+ SCORE20+ SCORE21+ SCORE22+ SCORE23+ SCORE24+ SCORE25+ SCORE26+ SCORE27
+			+ SCORE28+ SCORE29+ SCORE30+ SCORE31+ SCORE32+ SCORE33+ SCORE34+ SCORE35+ SCORE36+ SCORE37
+			+ SCORE38+ SCORE39+ SCORE40+ SCORE41+ SCORE42+ SCORE43+ SCORE44+ SCORE45+ SCORE46+ SCORE47
+			+ SCORE48+ SCORE49+ SCORE50+ SCORE51+ SCORE52+ SCORE53+ SCORE54+ SCORE55+ SCORE56+ SCORE57
+			+ SCORE58+ SCORE59+ SCORE60+ SCORE61+ SCORE62)/62,2),0) as avg1 
+		FROM COUNSEL_SERVICE
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PV ="사전"
+	</select>  
+	
+	 <select id ="getAf_CounselList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		IFNULL(SUM(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
+			SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE18
+			+ SCORE19+ SCORE20+ SCORE21+ SCORE22+ SCORE23+ SCORE24+ SCORE25+ SCORE26+ SCORE27
+			+ SCORE28+ SCORE29+ SCORE30+ SCORE31+ SCORE32+ SCORE33+ SCORE34+ SCORE35+ SCORE36+ SCORE37
+			+ SCORE38+ SCORE39+ SCORE40+ SCORE41+ SCORE42+ SCORE43+ SCORE44+ SCORE45+ SCORE46+ SCORE47
+			+ SCORE48+ SCORE49+ SCORE50+ SCORE51+ SCORE52+ SCORE53+ SCORE54+ SCORE55+ SCORE56+ SCORE57
+			+ SCORE58+ SCORE59+ SCORE60+ SCORE61+ SCORE62),0) as sum2,
+		IFNULL(ROUND(AVG(SCORE1+ SCORE2+ SCORE3+ SCORE4+ SCORE5+ SCORE6+ SCORE7+ SCORE8+ SCORE9+ SCORE10+
+			SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE18
+			+ SCORE19+ SCORE20+ SCORE21+ SCORE22+ SCORE23+ SCORE24+ SCORE25+ SCORE26+ SCORE27
+			+ SCORE28+ SCORE29+ SCORE30+ SCORE31+ SCORE32+ SCORE33+ SCORE34+ SCORE35+ SCORE36+ SCORE37
+			+ SCORE38+ SCORE39+ SCORE40+ SCORE41+ SCORE42+ SCORE43+ SCORE44+ SCORE45+ SCORE46+ SCORE47
+			+ SCORE48+ SCORE49+ SCORE50+ SCORE51+ SCORE52+ SCORE53+ SCORE54+ SCORE55+ SCORE56+ SCORE57
+			+ SCORE58+ SCORE59+ SCORE60+ SCORE61+ SCORE62)/62,2),0) as avg2 
+		FROM COUNSEL_SERVICE
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PV ="사후"
+	</select> 
+	<!-- ==========================================================힐링 ================================================= --> 
+	 <select id ="getPre_HealingList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		IFNULL(SUM(SCORE1+  SCORE2+  SCORE3+  SCORE4+  SCORE5+  SCORE6+  SCORE7+  SCORE8+  SCORE9+  SCORE10+
+			SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE19+ SCORE20+
+			SCORE21+ SCORE22),0) as sum1,
+			
+		IFNULL(ROUND(AVG(SCORE1+  SCORE2+  SCORE3+  SCORE4+  SCORE5+  SCORE6+  SCORE7+  SCORE8+  SCORE9+  SCORE10+
+				  SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE19+ SCORE20+
+				  SCORE21+ SCORE22)/22,2),0) as avg1
+		FROM HEALING_SERVICE
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PV ="사전"
+	</select> 
+	 <select id ="getAf_HealingList" parameterType="SearchDTO" resultType="SearchDTO">
+		SELECT 
+		IFNULL(SUM(SCORE1+  SCORE2+  SCORE3+  SCORE4+  SCORE5+  SCORE6+  SCORE7+  SCORE8+  SCORE9+  SCORE10+
+			SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE19+ SCORE20+
+			SCORE21+ SCORE22),0) as sum2,
+			
+		IFNULL(ROUND(AVG(SCORE1+  SCORE2+  SCORE3+  SCORE4+  SCORE5+  SCORE6+  SCORE7+  SCORE8+  SCORE9+  SCORE10+
+				  SCORE11+ SCORE12+ SCORE13+ SCORE14+ SCORE15+ SCORE16+ SCORE17+ SCORE18+ SCORE19+ SCORE20+
+				  SCORE21+ SCORE22)/22,2),0) as avg2
+		FROM HEALING_SERVICE
+		WHERE OPENDAY BETWEEN #{openday} AND #{endday} AND PV ="사후"
+	</select> 
+	
+	<!-- ===============================================지출  수입 =================================================-->
+	<select id="getExpenseList" parameterType="ExpenseDTO" resultType="ExpenseDTO">
+	SELECT ic.expense_type as type, group_concat(expense_price) as price1, 
+		group_concat(expense_detail) as detail1, group_concat(expense_note) as note1 
+		FROM foresthealing.expense ic
+		LEFT join foresthealing.basic_info bi
+		on (ic.BASIC_INFO_SEQ =bi.BASIC_INFO_SEQ)
+		WHERE bi.OPENDAY BETWEEN #{openday} AND #{endday}
+		group by ic.expense_type
+		order by type asc;
+	</select>
+	
+	<select id="getSumIncomeList" parameterType="IncomeDTO" resultType="IncomeDTO">
+	SELECT ic.INCOME_TYPE as type,group_concat(INCOME_PRICE) as price1, group_concat(INCOME_NOTE) as note1,
+		group_concat(INCOME_DETAIL) as detail1
+		FROM foresthealing.income ic
+		LEFT join foresthealing.basic_info bi
+		on (ic.BASIC_INFO_SEQ =bi.BASIC_INFO_SEQ)
+		WHERE bi.OPENDAY BETWEEN #{openday} AND #{endday}
+		group by ic.INCOME_TYPE
+		order by type asc;
+	</select>
+	
+	<select id="getFinalIncomeList" parameterType="IncomeDTO" resultType="IncomeDTO">
+	select res.income_type, Round(sum(res.sum),0) as sum
+		from (SELECT ic.income_type as income_type, (sum(ic.income_price) * 
+		(100 - (select income_price from income where basic_info_seq = b.BASIC_INFO_SEQ and income_type = "할인율" group by BASIC_INFO_SEQ) ) / 100)  as sum
+		FROM income ic, (select basic_info_seq from basic_info where openday between #{openday} and #{endday} and progress_state = "E" group by basic_info_seq) b
+		where ic.basic_info_seq = b.basic_info_seq
+		group by ic.income_type, b.basic_info_seq) res
+		where res.income_type != "할인율"
+		group by res.income_type;
+	</select>
+	
+	<select id ="getPreHrvList" parameterType="HrvInsertDTO" resultType="HrvInsertDTO">
+		SELECT  IFNULL(ROUND(AVG(nullif(num1,0)),2),0) as num1, IFNULL(ROUND(AVG(nullif(num2,0)),2),0) as num2,  IFNULL(ROUND(AVG(nullif(num3,0)),2),0) as num3,  IFNULL(ROUND(AVG(nullif(num4,0)),2),0) as num4,  IFNULL(ROUND(AVG(nullif(num5,0)),2),0) as num5
+		FROM HRV_SERVICE
+		WHERE DATE BETWEEN #{date} AND #{date_1} AND PV ="사전"
+	</select>
+	<select id ="getAftHrvList" parameterType="HrvInsertDTO" resultType="HrvInsertDTO">
+		SELECT  IFNULL(ROUND(AVG(nullif(num1,0)),2),0) as num1, IFNULL(ROUND(AVG(nullif(num2,0)),2),0) as num2,  IFNULL(ROUND(AVG(nullif(num3,0)),2),0) as num3,  IFNULL(ROUND(AVG(nullif(num4,0)),2),0) as num4,  IFNULL(ROUND(AVG(nullif(num5,0)),2),0) as num5
+		FROM HRV_SERVICE
+		WHERE DATE BETWEEN #{date} AND #{date_1} AND PV ="사후"
+	</select>
+	
+</mapper>

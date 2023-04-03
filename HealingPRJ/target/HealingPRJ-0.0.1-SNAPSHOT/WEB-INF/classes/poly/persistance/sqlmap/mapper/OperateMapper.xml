@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="poly.persistance.mapper.IOperateMapper">
+	<!-- 프로그램 운영 결과 입력 -->
+	<insert id="insertOperateResultProc" parameterType="BasicInfoDTO">
+
+		INSERT INTO basic_info
+		(
+			OPENDAY,
+			AGENCY,
+			OM,
+			ENDDAY,
+			DAYS_TO_STAY,
+			RESIDENCE,
+			PART_MAN_CNT,
+			PART_WOMAN_CNT,
+			LEAD_MAN_CNT,
+			LEAD_WOMAN_CNT,
+			SUPPORT,
+			INCOME_TYPE,
+			PART_TYPE,
+			AGE_TYPE,
+			BIZ_PURPOSE,
+			SERVICE_TYPE,
+			PROGRAM_IN_OUT,
+			ROOM_PART_PEOPLE,
+			ROOM_PART_ROOM,
+			ROOM_LEAD_PEOPLE,
+			ROOM_LEAD_ROOM,
+			ROOM_ETC_PEOPLE,
+			ROOM_ETC_ROOM,
+			MEAL_TYPE,
+			MEAL_PART,
+			MEAL_LEAD,
+			MEAL_ETC,
+			PROGRAM_OPINION,
+			SERVICE_OPINION,
+			OVERALL_OPINION,
+			PROGRESS_STATE,
+			REG_ID
+		)
+		VALUES
+		(
+			#{openday},
+			#{agency},
+			#{om},
+			#{endday},
+			#{days_to_stay},
+			#{residence},
+			#{part_man_cnt},
+			#{part_woman_cnt},
+			#{lead_man_cnt},
+			#{lead_woman_cnt},
+			#{support},
+			#{income_type},
+			#{part_type},
+			#{age_type},
+			#{biz_purpose},
+			#{service_type},
+			
+			CONCAT_WS(',', <foreach collection="program_in_out" item="program_in_out" separator=",">{ #{program_in_out.programName},#{program_in_out.bunya},#{program_in_out.teacher},#{program_in_out.in_tutor},#{program_in_out.out_tutor} }</foreach>),
+			
+			#{room_part_people},
+			#{room_part_room},
+			#{room_lead_people},
+			#{room_lead_room},
+			#{room_etc_people},
+			#{room_etc_room},
+			#{meal_type},
+			#{meal_part},
+			#{meal_lead},
+			#{meal_etc},
+			#{program_opinion},
+			#{service_opinion},
+			#{overall_opinion},
+			#{progress_state},
+			#{reg_id}
+		)
+
+		
+	</insert>
+
+	<!-- 프로그램 운영 결과 입력 -->
+	<insert id="insertBasic" parameterType="BasicInfoDTO">
+		INSERT INTO basic_info
+		(
+			OPENDAY,
+			AGENCY,
+			OM,
+			ENDDAY,
+			DAYS_TO_STAY,
+			RESIDENCE,
+			PART_MAN_CNT,
+			PART_WOMAN_CNT,
+			LEAD_MAN_CNT,
+			LEAD_WOMAN_CNT,
+			SUPPORT,
+			INCOME_TYPE,
+			PART_TYPE,
+			AGE_TYPE,
+			BIZ_PURPOSE,
+			SERVICE_TYPE,
+			PROGRAM_IN_OUT,
+			ROOM_PART_PEOPLE,
+			ROOM_PART_ROOM,
+			ROOM_LEAD_PEOPLE,
+			ROOM_LEAD_ROOM,
+			ROOM_ETC_PEOPLE,
+			ROOM_ETC_ROOM,
+			MEAL_TYPE,
+			MEAL_PART,
+			MEAL_LEAD,
+			MEAL_ETC,
+			PROGRAM_OPINION,
+			SERVICE_OPINION,
+			OVERALL_OPINION,
+			PROGRESS_STATE,
+			REG_ID
+		)
+		VALUES
+		(
+			#{openday},
+			#{agency},
+			#{om},
+			#{endday},
+			#{days_to_stay},
+			#{residence},
+			#{part_man_cnt},
+			#{part_woman_cnt},
+			#{lead_man_cnt},
+			#{lead_woman_cnt},
+			#{support},
+			#{income_type},
+			#{part_type},
+			#{age_type},
+			#{biz_purpose},
+			#{service_type},
+			
+			CONCAT_WS(',', <foreach collection="program_in_out" item="program_in_out" separator=",">{ #{program_in_out.programName},#{program_in_out.bunya},#{program_in_out.teacher},#{program_in_out.in_tutor},#{program_in_out.out_tutor} }</foreach>),
+			
+			#{room_part_people},
+			#{room_part_room},
+			#{room_lead_people},
+			#{room_lead_room},
+			#{room_etc_people},
+			#{room_etc_room},
+			#{meal_type},
+			#{meal_part},
+			#{meal_lead},
+			#{meal_etc},
+			#{program_opinion},
+			#{service_opinion},
+			#{overall_opinion},
+			#{progress_state},
+			#{reg_id}
+		)
+		
+	</insert>
+
+	<!-- 지출금액 다중 insert -->
+	<insert id="insertExpenses" parameterType="BasicInfoDTO">
+		INSERT INTO expense
+		(
+			EXPENSE_TYPE,
+			EXPENSE_PRICE,
+			EXPENSE_DETAIL,
+			EXPENSE_NOTE,
+			BASIC_INFO_SEQ
+		)
+		VALUES
+		<foreach item="expList" index="index" collection="expList" separator=",">
+		(
+			#{expList.type},
+			#{expList.price},
+			#{expList.detail},
+			#{expList.note},
+			(SELECT BASIC_INFO_SEQ FROM foresthealing.BASIC_INFO where openday = #{openday} and agency = #{agency} order by BASIC_INFO_SEQ)
+		)
+		</foreach>
+		
+	</insert>
+	
+	<!-- 수입금액 다중 insert -->
+	<insert id="insertIncomes" parameterType="BasicInfoDTO">
+		INSERT INTO income
+		(
+			INCOME_TYPE,
+			INCOME_PRICE,
+			INCOME_DETAIL,
+			INCOME_NOTE,
+			BASIC_INFO_SEQ
+		)
+		VALUES
+		<foreach item="incList" index="index" collection="incList" separator=",">
+		(
+			#{incList.type},
+			#{incList.price},
+			#{incList.detail},
+			#{incList.note},
+			(SELECT BASIC_INFO_SEQ FROM foresthealing.BASIC_INFO where openday = #{openday} and agency = #{agency} order by BASIC_INFO_SEQ)
+		)
+		</foreach>
+		
+	</insert>
+	
+	<!-- 프로그램 저장 -->
+	<insert id="insertProgramList" parameterType="ProgramInOutDTO" >
+		INSERT INTO
+			program_info
+			(
+				AGENCY,
+				OPENDAY,
+				PROGRAMNAME,
+				IN_TUTOR,
+				OUT_TUTOR,
+				BUNYA,
+				TEACHER
+			) values (
+				#{agency},
+				#{openday},
+				#{programName},
+				#{in_tutor},
+				#{out_tutor},
+				#{bunya},
+				#{teacher}
+			)
+	</insert>
+	
+	<!--동적 페이지 가져오기 - 운영결과입력서식  -->
+	<select id="getBasicInfoPage" resultType="BasicInfoPageDTO">
+		SELECT * FROM BASIC_INFO_PAGE
+		WHERE SEQ = (SELECT MAX(SEQ) FROM BASIC_INFO_page);
+	</select>
+	
+	<!--페이지 수정 -->
+	<insert id="updatePage" parameterType="BasicInfoPageDTO">
+		INSERT INTO BASIC_INFO_PAGE
+		(
+			SUPPORT,
+			INCOME_TYPE,
+			PART_TYPE,
+			BIZ_PURPOSE,
+			PROGRAM_IN_OUT,
+			SERVICE_TYPE,
+			AGE_TYPE
+		)
+		VALUES
+		(
+			#{support},
+			#{income_type},
+			#{part_type},
+			#{biz_purpose},
+			#{program_in_out},
+			#{service_type},
+			#{age_type}
+		)
+	</insert>
+	
+	<!--프로그램 운영결과 삭제 -->
+	<delete id="deleteBasicInfo" parameterType="BasicInfoDTO">
+		DELETE FROM basic_info
+		WHERE OPENDAY = #{openday}
+		AND AGENCY = #{agency}
+	</delete>
+	<!--수입금액 삭제 -->
+	<delete id="deleteIncomeInfo" parameterType="BasicInfoDTO">
+		DELETE FROM income
+		WHERE BASIC_INFO_SEQ = #{basic_info_seq}
+	</delete>
+	<!--지출금액 삭제 -->
+	<delete id="deleteExpenseInfo" parameterType="BasicInfoDTO">
+		DELETE FROM expense
+		WHERE BASIC_INFO_SEQ = #{basic_info_seq}
+	</delete>
+	<!--프로그램인포 삭제 -->
+	<delete id="deleteProgramInfo" parameterType="ProgramInOutDTO">
+		DELETE FROM program_info
+		WHERE OPENDAY = #{openday}
+		AND AGENCY = #{agency}
+	</delete>
+	
+	<!--reg_id 중간저장  -->
+	<select id="getSaveList" resultType="BasicInfoDTO" parameterType="BasicInfoDTO">
+		SELECT AGENCY, OPENDAY FROM foresthealing.basic_info
+		WHERE REG_ID = #{reg_id} AND PROGRESS_STATE = "P"
+	</select>
+	
+	<!--중간저장 가져오기  -->
+	<select id="getBasicInfoSave" resultType="BasicInfoDTO" parameterType="BasicInfoDTO">
+		SELECT BASIC_INFO_SEQ, OPENDAY, AGENCY, OM, ENDDAY, DAYS_TO_STAY, RESIDENCE, PART_MAN_CNT, PART_WOMAN_CNT, LEAD_MAN_CNT, LEAD_WOMAN_CNT, SUPPORT, INCOME_TYPE, PART_TYPE, AGE_TYPE, BIZ_PURPOSE, SERVICE_TYPE,
+		ROOM_PART_PEOPLE, ROOM_PART_ROOM, ROOM_LEAD_PEOPLE, ROOM_LEAD_ROOM, ROOM_ETC_PEOPLE, ROOM_ETC_ROOM, MEAL_TYPE, MEAL_PART, MEAL_LEAD, MEAL_ETC,
+		PROGRAM_OPINION, SERVICE_OPINION, OVERALL_OPINION, REG_ID, PROGRAM_IN_OUT as program_in_out2  FROM foresthealing.basic_info
+		WHERE REG_ID = #{reg_id} AND PROGRESS_STATE = "P" AND OPENDAY = #{openday} AND AGENCY = #{agency}
+	</select>
+	<!--expense 중간저장 가져오기  -->
+	<select id="getExpenseSave" parameterType="ExpenseDTO" resultType="ExpenseDTO">
+		SELECT EXPENSE_TYPE as type, EXPENSE_PRICE as price, EXPENSE_DETAIL as detail, EXPENSE_NOTE as note, BASIC_INFO_SEQ from expense
+		WHERE BASIC_INFO_SEQ = #{basic_info_seq}
+	</select>
+	<select id="getIncomeSave" parameterType="IncomeDTO" resultType="IncomeDTO">
+		SELECT INCOME_TYPE as type, INCOME_PRICE as price, INCOME_DETAIL as detail, INCOME_NOTE as note, BASIC_INFO_SEQ from income
+		WHERE BASIC_INFO_SEQ = #{basic_info_seq}
+	</select>
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="poly.persistance.mapper.IHistoryMapper">
+	<!-- 히스토리 넣기  -->
+	<insert id="insertHistory" parameterType="HistoryDTO">
+		INSERT INTO HISTORY
+		(
+		SEQ,
+		REG_ID,
+		DATE,
+		DESCRIPTION
+		)
+		VALUE
+		(
+		(SELECT IFNULL(MAX(A.SEQ),0)+1 FROM HISTORY A),
+		#{reg_id},
+		#{date},
+		#{description}
+		)
+	</insert>
+	
+	<!--관리자가 히스토리 전부 가져오기 -->
+	<select id="getAllHistories" resultType="HistoryDTO">
+		SELECT * FROM HISTORY	
+		ORDER BY SEQ DESC
+	</select>
+
+	<!--관리자가 검색해서 히스토리 가져오기  -->
+	<select id="getHistory" parameterType="HistoryDTO" resultType="HistoryDTO">
+		SELECT * FROM HISTORY
+		WHERE REG_ID=#{reg_id}
+		ORDER BY SEQ DESC
+	</select>
+	
+	<!--작성자 리스트 가져오기  -->
+	<select id="getRegUser" resultType="UserDTO">
+		SELECT user_name FROM user_info
+	</select>
+</mapper>
+
+
